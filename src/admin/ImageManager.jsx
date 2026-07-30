@@ -1,0 +1,194 @@
+import { useState } from 'react'
+import {
+  DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors,
+} from '@dnd-kit/core'
+import { restrictToParentElement } from '@dnd-kit/modifiers'
+import {
+  SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates, useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { GripVertical, Trash2, Plus, Star, ImageOff, RotateCcw } from 'lucide-react'
+import toast from 'react-hot-toast'
+import cx from '../lib/cx'
+import { imagesFor, SHOT_LABELS, SHOTS } from '../data/colorways.mjs'
+
+/**
+ * Multi-image manager for one colourway.
+ *
+ * Order is meaningful: image 1 is the card thumbnail and the first carousel
+ * slide, so "make primary" is just a move-to-front. Drag, keyboard and the
+ * arrow-free reorder buttons all go through the same handler.
+ */
+export default function ImageManager({ images = [], onChange, colorwayCode }) {
+  const [url, setUrl] = useState('')
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const onDragEnd = ({ active, over }) => {
+    if (!over || active.id === over.id) return
+    const from = images.indexOf(active.id)
+    const to = images.indexOf(over.id)
+    if (from < 0 || to < 0) return
+    onChange(arrayMove(images, from, to))
+  }
+
+  const add = (e) => {
+    e.preventDefault()
+    const next = url.trim()
+    if (!next) return
+    if (images.includes(next)) {
+      toast.error('That image is already on this colourway.')
+      return
+    }
+    onChange([...images, next])
+    setUrl('')
+  }
+
+  const remove = (src) => onChange(images.filter((s) => s !== src))
+  const makePrimary = (src) => onChange([src, ...images.filter((s) => s !== src)])
+
+  const restoreGenerated = () => {
+    if (!colorwayCode) return
+    onChange(imagesFor(colorwayCode))
+    toast.success(`Restored the four generated shots for ${colorwayCode}`)
+  }
+
+  return (
+    <div>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="spec-key">
+          Images — {images.length} {images.length === 1 ? 'shot' : 'shots'}
+        </p>
+        {colorwayCode && (
+          <button
+            type="button"
+            onClick={restoreGenerated}
+            className="flex items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-taupe hover:text-ink"
+          >
+            <RotateCcw size={12} />
+            Restore generated set
+          </button>
+        )}
+      </div>
+
+      {images.length === 0 ? (
+        <div className="flex flex-col items-center border border-dashed border-ink/20 px-4 py-10 text-center">
+          <ImageOff size={20} strokeWidth={1.5} className="mb-3 text-taupe" />
+          <p className="text-sm text-taupe">No images on this colourway yet.</p>
+          <p className="mt-1 max-w-xs font-mono text-2xs leading-relaxed text-taupe-light">
+            Paste an image URL below, or restore the generated set and swap them out one at a time.
+          </p>
+        </div>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={onDragEnd}
+          modifiers={[restrictToParentElement]}
+        >
+          <SortableContext items={images} strategy={rectSortingStrategy}>
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {images.map((src, i) => (
+                <Tile
+                  key={src}
+                  src={src}
+                  index={i}
+                  onRemove={() => remove(src)}
+                  onMakePrimary={() => makePrimary(src)}
+                />
+              ))}
+            </ul>
+          </SortableContext>
+        </DndContext>
+      )}
+
+      <form onSubmit={add} className="mt-3 flex gap-2">
+        <input
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="/img/fabric/ha-04-drape.svg  or  https://…"
+          className="field-boxed font-mono text-2xs"
+          aria-label="Image URL"
+        />
+        <button type="submit" className="btn-outline shrink-0 px-3.5 py-2.5">
+          <Plus size={15} />
+        </button>
+      </form>
+      <p className="mt-1.5 font-mono text-2xs leading-relaxed text-taupe">
+        Drag to reorder. The first image is the card thumbnail and the first carousel slide. Any URL
+        works — point these at real photography when you have it.
+      </p>
+    </div>
+  )
+}
+
+function Tile({ src, index, onRemove, onMakePrimary }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: src,
+  })
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={cx(
+        'group relative border bg-blush-warm',
+        isDragging ? 'z-10 border-rose shadow-liftlg' : 'border-ink/10'
+      )}
+    >
+      <img
+        src={src}
+        alt=""
+        className="aspect-[3/4] w-full object-cover"
+        onError={(e) => {
+          e.currentTarget.style.opacity = '0.25'
+        }}
+      />
+
+      <span className="absolute left-1.5 top-1.5 bg-ink/85 px-1.5 py-0.5 font-mono text-[10px] leading-none text-blush">
+        {index === 0 ? 'PRIMARY' : String(index + 1).padStart(2, '0')}
+      </span>
+
+      {SHOTS[index] && (
+        <span className="absolute inset-x-1.5 bottom-1.5 truncate bg-blush/85 px-1.5 py-0.5 font-mono text-[10px] leading-none text-ink backdrop-blur">
+          {SHOT_LABELS[SHOTS[index]]}
+        </span>
+      )}
+
+      <div className="absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+        {index !== 0 && (
+          <button
+            type="button"
+            onClick={onMakePrimary}
+            title="Make this the primary image"
+            aria-label="Make this the primary image"
+            className="grid h-6 w-6 place-items-center bg-blush/90 text-ink hover:bg-blush"
+          >
+            <Star size={11} />
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={onRemove}
+          title="Remove image"
+          aria-label="Remove image"
+          className="grid h-6 w-6 place-items-center bg-blush/90 text-clay hover:bg-blush"
+        >
+          <Trash2 size={11} />
+        </button>
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          title="Drag to reorder"
+          aria-label="Drag to reorder"
+          className="grid h-6 w-6 cursor-grab place-items-center bg-blush/90 text-ink hover:bg-blush active:cursor-grabbing"
+        >
+          <GripVertical size={11} />
+        </button>
+      </div>
+    </li>
+  )
+}

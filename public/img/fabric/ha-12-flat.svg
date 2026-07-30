@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Blush Pearl folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edd6d2"/>
+      <stop offset=".34" stop-color="#E7C8C4"/>
+      <stop offset="1" stop-color="#a58e8d"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edd6d2"/>
+      <stop offset=".34" stop-color="#E7C8C4"/>
+      <stop offset="1" stop-color="#a58e8d"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edd6d2"/>
+      <stop offset=".34" stop-color="#E7C8C4"/>
+      <stop offset="1" stop-color="#a58e8d"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#e4deda"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M197 372H733V476H197A52 52 0 0 1 197 372Z" fill="url(#b0)"/>
+      <path d="M205 398H733" stroke="#8b7777" stroke-width="1.4" opacity=".4"/>
+      <path d="M217 424H733" stroke="#8b7777" stroke-width="1.4" opacity=".26"/>
+      <path d="M197 375H733" stroke="#f1ddda" stroke-width="2.4" opacity=".5"/>
+      <path d="M732 372V476" stroke="#796869" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M219.2 516H739.2V620H219.2A52 52 0 0 1 219.2 516Z" fill="url(#b1)"/>
+      <path d="M227.2 542H739.2" stroke="#8b7777" stroke-width="1.4" opacity=".4"/>
+      <path d="M239.2 568H739.2" stroke="#8b7777" stroke-width="1.4" opacity=".26"/>
+      <path d="M219.2 519H739.2" stroke="#f1ddda" stroke-width="2.4" opacity=".5"/>
+      <path d="M738.2 516V620" stroke="#796869" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M225.2 660H729.2V764H225.2A52 52 0 0 1 225.2 660Z" fill="url(#b2)"/>
+      <path d="M233.2 686H729.2" stroke="#8b7777" stroke-width="1.4" opacity=".4"/>
+      <path d="M245.2 712H729.2" stroke="#8b7777" stroke-width="1.4" opacity=".26"/>
+      <path d="M225.2 663H729.2" stroke="#f1ddda" stroke-width="2.4" opacity=".5"/>
+      <path d="M728.2 660V764" stroke="#796869" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#f36cNaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#E7C8C4"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-12</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">BLUSH PEARL</text>
+</g>
+</svg>

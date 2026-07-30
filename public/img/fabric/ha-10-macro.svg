@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Terracotta weave at 4× magnification">
+<defs>
+<linearGradient id="yarn" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#88442e"/><stop offset=".3" stop-color="#B4593A"/>
+  <stop offset=".52" stop-color="#c1755b"/><stop offset="1" stop-color="#88442e"/>
+</linearGradient>
+<linearGradient id="yarnH" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#88442e"/><stop offset=".3" stop-color="#B4593A"/>
+  <stop offset=".52" stop-color="#c1755b"/><stop offset="1" stop-color="#88442e"/>
+</linearGradient>
+<pattern id="warp" width="34" height="34" patternUnits="userSpaceOnUse">
+  <rect x="4.08" width="25.84" height="34" rx="10.2" fill="url(#yarn)"/>
+</pattern>
+<pattern id="weft" width="34" height="34" patternUnits="userSpaceOnUse">
+  <rect y="4.08" width="34" height="25.84" rx="10.2" fill="url(#yarnH)"/>
+</pattern>
+<pattern id="check" width="68" height="68" patternUnits="userSpaceOnUse">
+  <rect width="34" height="34" fill="#fff"/>
+  <rect x="34" y="34" width="34" height="34" fill="#fff"/>
+</pattern>
+<mask id="over"><rect width="900" height="1200" fill="url(#check)"/></mask>
+<radialGradient id="focus" cx=".46" cy=".44" r=".58">
+  <stop offset=".26" stop-color="#000" stop-opacity="0"/>
+  <stop offset="1" stop-color="#000" stop-opacity=".62"/>
+</radialGradient>
+</defs>
+<rect width="900" height="1200" fill="#603124"/>
+<rect width="900" height="1200" fill="url(#warp)"/>
+<g mask="url(#over)"><rect width="900" height="1200" fill="url(#weft)"/></g>
+<path d="M292.7 779.3q162.6 -6.4 528.6 -15.2" stroke="#ddb3a4" stroke-width="0.9" fill="none" opacity="0.3"/><path d="M221.9 529.3q183.1 -38.4 593 29.8" stroke="#ddb3a4" stroke-width="0.8" fill="none" opacity="0.3"/><path d="M15.4 1040.1q204.8 17.5 755.4 -18.8" stroke="#ddb3a4" stroke-width="1.5" fill="none" opacity="0.3"/><path d="M39.3 77.1q300.3 -55.7 496 -27.6" stroke="#ddb3a4" stroke-width="1.2" fill="none" opacity="0.2"/><path d="M209.1 77.6q160.4 -28.1 703.4 14.3" stroke="#ddb3a4" stroke-width="1.6" fill="none" opacity="0.3"/><path d="M84 700.1q238.9 -52 712 1.1" stroke="#ddb3a4" stroke-width="1" fill="none" opacity="0.3"/><path d="M133.6 1074.1q214.2 25.2 742.8 -6.8" stroke="#ddb3a4" stroke-width="1.5" fill="none" opacity="0.2"/>
+<rect width="900" height="1200" fill="url(#focus)"/>
+</svg>

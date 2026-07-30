@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Sage Mist folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfc8b9"/>
+      <stop offset=".34" stop-color="#A8B5A2"/>
+      <stop offset="1" stop-color="#798175"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfc8b9"/>
+      <stop offset=".34" stop-color="#A8B5A2"/>
+      <stop offset="1" stop-color="#798175"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfc8b9"/>
+      <stop offset=".34" stop-color="#A8B5A2"/>
+      <stop offset="1" stop-color="#798175"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#dddcd6"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M208.7 372H744.7V476H208.7A52 52 0 0 1 208.7 372Z" fill="url(#b0)"/>
+      <path d="M216.7 398H744.7" stroke="#666c63" stroke-width="1.4" opacity=".4"/>
+      <path d="M228.7 424H744.7" stroke="#666c63" stroke-width="1.4" opacity=".26"/>
+      <path d="M208.7 375H744.7" stroke="#cbd2c5" stroke-width="2.4" opacity=".5"/>
+      <path d="M743.7 372V476" stroke="#5a5f58" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M211.6 516H731.6V620H211.6A52 52 0 0 1 211.6 516Z" fill="url(#b1)"/>
+      <path d="M219.6 542H731.6" stroke="#666c63" stroke-width="1.4" opacity=".4"/>
+      <path d="M231.6 568H731.6" stroke="#666c63" stroke-width="1.4" opacity=".26"/>
+      <path d="M211.6 519H731.6" stroke="#cbd2c5" stroke-width="2.4" opacity=".5"/>
+      <path d="M730.6 516V620" stroke="#5a5f58" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M231.9 660H735.9V764H231.9A52 52 0 0 1 231.9 660Z" fill="url(#b2)"/>
+      <path d="M239.9 686H735.9" stroke="#666c63" stroke-width="1.4" opacity=".4"/>
+      <path d="M251.9 712H735.9" stroke="#666c63" stroke-width="1.4" opacity=".26"/>
+      <path d="M231.9 663H735.9" stroke="#cbd2c5" stroke-width="2.4" opacity=".5"/>
+      <path d="M734.9 660V764" stroke="#5a5f58" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#f06bNaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#A8B5A2"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-05</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">SAGE MIST</text>
+</g>
+</svg>

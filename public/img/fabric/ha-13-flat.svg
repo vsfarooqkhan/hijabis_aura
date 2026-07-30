@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Lavender Haze folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7bcd4"/>
+      <stop offset=".34" stop-color="#B3A5C6"/>
+      <stop offset="1" stop-color="#81768f"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7bcd4"/>
+      <stop offset=".34" stop-color="#B3A5C6"/>
+      <stop offset="1" stop-color="#81768f"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7bcd4"/>
+      <stop offset=".34" stop-color="#B3A5C6"/>
+      <stop offset="1" stop-color="#81768f"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#dedada"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M199 372H735V476H199A52 52 0 0 1 199 372Z" fill="url(#b0)"/>
+      <path d="M207 398H735" stroke="#6c6378" stroke-width="1.4" opacity=".4"/>
+      <path d="M219 424H735" stroke="#6c6378" stroke-width="1.4" opacity=".26"/>
+      <path d="M199 375H735" stroke="#d1c8db" stroke-width="2.4" opacity=".5"/>
+      <path d="M734 372V476" stroke="#5f576a" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M224.5 516H744.5V620H224.5A52 52 0 0 1 224.5 516Z" fill="url(#b1)"/>
+      <path d="M232.5 542H744.5" stroke="#6c6378" stroke-width="1.4" opacity=".4"/>
+      <path d="M244.5 568H744.5" stroke="#6c6378" stroke-width="1.4" opacity=".26"/>
+      <path d="M224.5 519H744.5" stroke="#d1c8db" stroke-width="2.4" opacity=".5"/>
+      <path d="M743.5 516V620" stroke="#5f576a" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M225 660H729V764H225A52 52 0 0 1 225 660Z" fill="url(#b2)"/>
+      <path d="M233 686H729" stroke="#6c6378" stroke-width="1.4" opacity=".4"/>
+      <path d="M245 712H729" stroke="#6c6378" stroke-width="1.4" opacity=".26"/>
+      <path d="M225 663H729" stroke="#d1c8db" stroke-width="2.4" opacity=".5"/>
+      <path d="M728 660V764" stroke="#5f576a" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#f06aNaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#B3A5C6"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-13</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">LAVENDER HAZE</text>
+</g>
+</svg>

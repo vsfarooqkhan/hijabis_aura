@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Jade Deep folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#599185"/>
+      <stop offset=".34" stop-color="#1F6B5C"/>
+      <stop offset="1" stop-color="#194d44"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#599185"/>
+      <stop offset=".34" stop-color="#1F6B5C"/>
+      <stop offset="1" stop-color="#194d44"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#599185"/>
+      <stop offset=".34" stop-color="#1F6B5C"/>
+      <stop offset="1" stop-color="#194d44"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#ccd3ce"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M211.7 372H747.7V476H211.7A52 52 0 0 1 211.7 372Z" fill="url(#b0)"/>
+      <path d="M219.7 398H747.7" stroke="#17413b" stroke-width="1.4" opacity=".4"/>
+      <path d="M231.7 424H747.7" stroke="#17413b" stroke-width="1.4" opacity=".26"/>
+      <path d="M211.7 375H747.7" stroke="#79a59b" stroke-width="2.4" opacity=".5"/>
+      <path d="M746.7 372V476" stroke="#153a35" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M205.2 516H725.2V620H205.2A52 52 0 0 1 205.2 516Z" fill="url(#b1)"/>
+      <path d="M213.2 542H725.2" stroke="#17413b" stroke-width="1.4" opacity=".4"/>
+      <path d="M225.2 568H725.2" stroke="#17413b" stroke-width="1.4" opacity=".26"/>
+      <path d="M205.2 519H725.2" stroke="#79a59b" stroke-width="2.4" opacity=".5"/>
+      <path d="M724.2 516V620" stroke="#153a35" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M235.3 660H739.3V764H235.3A52 52 0 0 1 235.3 660Z" fill="url(#b2)"/>
+      <path d="M243.3 686H739.3" stroke="#17413b" stroke-width="1.4" opacity=".4"/>
+      <path d="M255.3 712H739.3" stroke="#17413b" stroke-width="1.4" opacity=".26"/>
+      <path d="M235.3 663H739.3" stroke="#79a59b" stroke-width="2.4" opacity=".5"/>
+      <path d="M738.3 660V764" stroke="#153a35" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#e867NaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#1F6B5C"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-04</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">JADE DEEP</text>
+</g>
+</svg>
