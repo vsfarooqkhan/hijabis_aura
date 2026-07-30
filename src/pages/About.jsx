@@ -20,8 +20,8 @@ const CHAPTERS = [
   },
   {
     year: '2023',
-    title: 'So we bought a light meter',
-    body: 'We built a bench: one fixed lamp, a printed reference card, a 90° edge, a 30 cm rule. Every roll that came in got measured the same way. Within a month we could answer the question with a number instead of an adjective — and we started printing that number on the label.',
+    title: 'So we started printing the spec',
+    body: 'So we stopped answering it ourselves and started passing on what the mill tells us. Fabric, weave, weight in GSM, exact dimensions, where it was woven — printed on the product page instead of summarised as “premium quality”. It is not a clever answer, it is just the actual information.',
     img: '/img/story/dyehouse.svg',
   },
   {
@@ -49,8 +49,8 @@ export function About() {
           </h1>
           <p className="mt-6 text-[17px] leading-relaxed text-blush/70">
             Buying cloth online means buying something you cannot touch. Nobody can fix that. What we
-            can fix is the guessing — by measuring the three things that a photograph hides, on every
-            single piece, and printing them where you can read them before you decide.
+            can fix is the guessing — by printing the full specification of every piece where you
+            can read it, and saying plainly when something is sheer, slippery or dry-clean only.
           </p>
           <p className="mt-7 font-script text-3xl text-gold">{brand.tagline}</p>
         </div>
@@ -91,8 +91,8 @@ export function About() {
           <div className="grid gap-8 lg:grid-cols-3">
             {[
               [
-                'We publish the unflattering numbers',
-                'Our sheerest chiffon scores 58 on opacity and we print it. It sells less than it would with a vaguer description, and the people who buy it are never disappointed.',
+                'We say when something is sheer',
+                'Our lightest chiffon is 58 GSM and genuinely see-through, and the description says exactly that rather than calling it delicate. It sells less than a vaguer listing would, and the people who buy it are never disappointed.',
               ],
               [
                 'We photograph every dye lot of tie-dye',
@@ -118,15 +118,15 @@ export function About() {
         <div className="grid gap-8 border border-ink/12 bg-blush-warm p-8 md:grid-cols-[1fr_auto] md:items-center md:p-10">
           <div>
             <h2 className="text-2xl md:text-3xl">
-              {products.length} pieces, {COLORWAYS.length} colourways, one bench
+              {products.length} pieces, {COLORWAYS.length} colourways
             </h2>
             <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink/70">
-              Read the method, then go and read a label. That is the whole idea.
+              Read a label before you buy. That is the whole idea.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/how-it-falls" className="btn-ink">
-              The method
+            <Link to="/size-guide" className="btn-ink">
+              Size guide
             </Link>
             <Link to="/shop" className="btn-outline">
               Shop all

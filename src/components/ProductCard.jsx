@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom'
 import { Heart, ShoppingBag } from 'lucide-react'
 import toast from 'react-hot-toast'
 import cx from '../lib/cx'
-import { DrapeSignature } from './DrapeMeter'
 import { Badge, PriceTag, Stars, Swatch } from './ui'
 import useStore, { stockOf } from '../store/useStore'
 import { WEAVE_LABELS } from '../data/collections'
 
 /**
- * A card is a swatch card: the shot, the mill line, and the drape read.
+ * A card is a swatch card: the shot and the mill line.
  * Hovering swaps to the styled shot; choosing a colourway swaps the whole
  * image set, because on this catalogue the colour *is* the product.
  */
@@ -118,8 +117,6 @@ export default function ProductCard({ product, priority = false, className }) {
         {product.reviewCount > 0 && (
           <Stars value={product.rating} count={product.reviewCount} className="mt-2" />
         )}
-
-        <DrapeSignature drape={product.drape} className="mt-3.5" />
 
         {product.colorways.length > 1 && (
           <div className="mt-3.5 flex flex-wrap items-center gap-1.5">

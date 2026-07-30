@@ -1,5 +1,5 @@
-import { PRODUCTS } from './products'
-import { SETTINGS } from './settings'
+import { PRODUCTS } from './products.js'
+import { SETTINGS } from './settings.js'
 
 /**
  * Ninety days of trading, generated from a fixed seed so the dashboard shows
@@ -250,9 +250,9 @@ export const COUPONS = [
 /* -------------------------------------------------------------- reviews --- */
 
 const REVIEW_TEXT = [
-  ['Bought this in Oat Chalk after reading the drape numbers and they were honest — it really does fall in long lines rather than breaking up. Second one ordered.', 5, 'Fabric matched the description exactly'],
+  ['Bought this in Oat Chalk after reading the fabric details and they were accurate — it really does fall in long lines rather than breaking up. Second one ordered.', 5, 'Fabric matched the description exactly'],
   ['I have a large head and most jersey hijabs pull tight by evening. This one did not. The 4% elastane claim is real.', 5, 'Held shape all day'],
-  ['Lovely colour but sheerer than I expected even at 72% opacity. Wear it with the matching cap and it is perfect.', 4, 'Wear it with a cap'],
+  ['Lovely colour but sheerer than I expected. The description did say it was light, so my fault — wear it with the matching cap and it is perfect.', 4, 'Wear it with a cap'],
   ['The crinkle survived three washes and a suitcase. No iron, exactly as promised.', 5, 'No iron needed, genuinely'],
   ['Shipping took six days to Kozhikode which was within the window. Packaging was flat and simple, no waste.', 5, 'Arrived well packed'],
   ['Satin side out for the wedding, crepe side out for work. Two hijabs for the price of one.', 5, 'Reversible is the selling point'],

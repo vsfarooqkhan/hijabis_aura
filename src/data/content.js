@@ -5,20 +5,16 @@ export const FAQS = [
     group: 'Buying',
     items: [
       {
-        q: 'What do the three drape numbers actually mean?',
-        a: 'Opacity is measured against 10pt printed text at 30 cm — 100 means you cannot read a word through one layer. Fall is measured by draping the cloth over a 90° studio edge and marking where the fold breaks. Finish is photographed under one fixed light at 45°. Same cloth, same light, same distance, every time, so the numbers are comparable across the whole catalogue.',
-      },
-      {
         q: 'Do you have the colour I saw on Instagram?',
         a: 'Every colour we have ever run has a code on our dye card, and the code is printed on the product page. Send us the post on WhatsApp and we will tell you the code and whether it is still in stock.',
       },
       {
         q: 'Will the colour match my screen?',
-        a: 'Close, not exact — no screen is calibrated the same. Our photographs are shot under one fixed light with no colour grading, so what you see is what came off the roll. Tie-dye pieces vary by lot and we say so on those pages.',
+        a: 'Close, not exact — no two screens show a colour the same way, and dye lots vary slightly between runs. If an exact match matters, message us before ordering and we will tell you honestly how close it is. Hand tie-dyed pieces vary the most, and we say so on those pages.',
       },
       {
         q: 'How do I know which one is opaque enough?',
-        a: 'Filter the shop by "Fully opaque" — that is everything at 90 or above, which does not need an under-cap. Anything under 75 we would wear with a matching cap.',
+        a: 'Weight is the best guide. Anything over 150 GSM — our jerseys and the Turkish cotton — needs no under-cap. Chiffons and georgettes under 80 GSM are sheer, and we say so in the description. If you are unsure about a specific piece, message us and we will tell you straight.',
       },
     ],
   },
@@ -100,7 +96,7 @@ export const STYLING_STEPS = [
     time: '15 seconds',
     best: 'Crinkle chiffon, ribbed jersey',
     steps: [
-      'Skip the cap if the fabric is 90 opacity or above.',
+      'Skip the cap on a heavier jersey — anything over 150 GSM sits opaque on its own.',
       'Centre it with both ends equal.',
       'Cross the ends under your chin and pull gently — crinkle grips crinkle, so it holds itself.',
       'Tuck both ends back over opposite shoulders. Nothing to pin.',
@@ -247,7 +243,7 @@ export const POLICIES = {
       { h: 'When the contract starts', p: 'When we send your order confirmation, not when you press the button. If something has gone out of stock between the two, we will tell you and refund immediately.' },
       { h: 'Pricing errors', p: 'If a price is obviously wrong — a ₹1,699 satin listed at ₹169 — we will cancel and refund rather than honour it, and we will tell you why.' },
       { h: 'Product variation', p: 'Colour varies slightly between dye lots, and hand tie-dyed and hand-embellished pieces vary by design. Product pages say so where it applies. This is not a defect.' },
-      { h: 'The drape numbers', p: 'They are measured in our own studio by a consistent method, and we publish the method. They are a guide to help you choose, not a warranty of a specific physical property.' },
+      { h: 'Fabric specification', p: 'Fabric, weave, GSM, dimensions and composition are passed on from our mills as supplied to us. They are accurate to the best of our knowledge and are a guide to help you choose, not a warranty of a specific physical property.' },
       { h: 'Cash on delivery', p: 'Repeatedly refusing COD parcels may mean we ask you to prepay on future orders. We will tell you if that happens.' },
       { h: 'Disputes', p: 'Indian law applies and the courts of Mumbai have jurisdiction. Before any of that, message us — almost everything is solved in one WhatsApp exchange.' },
     ],

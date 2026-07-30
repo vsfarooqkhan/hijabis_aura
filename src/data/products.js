@@ -1,14 +1,12 @@
 import { imagesFor, byCode } from './colorways.mjs'
 
 /**
- * The catalogue. Every product carries its mill spec, because the whole
- * storefront is built on the promise that you know how it falls before it
- * arrives.
+ * The catalogue. Every product carries its mill spec — fabric, weave, GSM,
+ * dimensions, composition, origin and care — because that is the information a
+ * supplier actually gives you, and printing it is the whole promise.
  *
- * drape: the three things a photo cannot tell you, each 0–100.
- *   opacity  0 = you can read through it   100 = fully opaque
- *   fluid    0 = holds a crisp edge        100 = pours
- *   sheen    0 = flat matte                100 = high lustre
+ * Placeholder data. Replace with your real supplier figures before going live;
+ * do not publish a GSM or composition you cannot stand behind.
  */
 
 const cw = (code, stock) => {
@@ -35,7 +33,6 @@ export const PRODUCTS = [
     weight: 88,
     origin: 'Surat, Gujarat',
     care: 'Hand wash cold. Never iron — the crinkle is the finish.',
-    drape: { opacity: 72, fluid: 84, sheen: 22 },
     pinless: true,
     featured: true,
     published: true,
@@ -69,7 +66,6 @@ export const PRODUCTS = [
     weight: 165,
     origin: 'Tiruppur, Tamil Nadu',
     care: 'Machine wash cold, tumble low. Reshape while damp.',
-    drape: { opacity: 96, fluid: 58, sheen: 8 },
     pinless: true,
     featured: true,
     published: true,
@@ -103,7 +99,6 @@ export const PRODUCTS = [
     weight: 148,
     origin: 'Ludhiana, Punjab',
     care: 'Machine wash cold on gentle. Line dry in shade.',
-    drape: { opacity: 92, fluid: 74, sheen: 18 },
     pinless: false,
     featured: true,
     published: true,
@@ -137,7 +132,6 @@ export const PRODUCTS = [
     weight: 132,
     origin: 'Varanasi, Uttar Pradesh',
     care: 'Dry clean, or hand wash cold with no wringing.',
-    drape: { opacity: 88, fluid: 92, sheen: 86 },
     pinless: false,
     featured: true,
     published: true,
@@ -171,7 +165,6 @@ export const PRODUCTS = [
     weight: 118,
     origin: 'Coimbatore, Tamil Nadu',
     care: 'Hand wash cold. Dry flat in shade.',
-    drape: { opacity: 84, fluid: 78, sheen: 14 },
     pinless: false,
     featured: false,
     published: true,
@@ -201,7 +194,6 @@ export const PRODUCTS = [
     weight: 140,
     origin: 'Tiruppur, Tamil Nadu',
     care: 'Machine wash cold in a mesh bag.',
-    drape: { opacity: 98, fluid: 46, sheen: 6 },
     pinless: true,
     featured: false,
     published: true,
@@ -235,7 +227,6 @@ export const PRODUCTS = [
     weight: 102,
     origin: 'Surat, Gujarat',
     care: 'Hand wash cold, separately for the first wash.',
-    drape: { opacity: 66, fluid: 80, sheen: 62 },
     pinless: false,
     featured: false,
     published: true,
@@ -269,7 +260,6 @@ export const PRODUCTS = [
     weight: 96,
     origin: 'Erode, Tamil Nadu',
     care: 'Machine wash warm. Iron on cotton setting.',
-    drape: { opacity: 78, fluid: 52, sheen: 4 },
     pinless: false,
     featured: false,
     published: true,
@@ -299,7 +289,6 @@ export const PRODUCTS = [
     weight: 310,
     origin: 'Hand-worked in Lucknow, Uttar Pradesh',
     care: 'Dry clean only. Store flat, rolled in tissue.',
-    drape: { opacity: 44, fluid: 88, sheen: 74 },
     pinless: false,
     featured: true,
     published: true,
@@ -334,7 +323,6 @@ export const PRODUCTS = [
     weight: 64,
     origin: 'Surat, Gujarat',
     care: 'Hand wash cold. Drip dry — dries in minutes.',
-    drape: { opacity: 58, fluid: 86, sheen: 30 },
     pinless: false,
     featured: false,
     published: true,
@@ -364,7 +352,6 @@ export const PRODUCTS = [
     weight: 172,
     origin: 'Woven in Denizli, Türkiye',
     care: 'Machine wash cold. Warm iron if you want a sharper edge.',
-    drape: { opacity: 97, fluid: 40, sheen: 12 },
     pinless: false,
     featured: false,
     published: true,
@@ -394,7 +381,6 @@ export const PRODUCTS = [
     weight: 94,
     origin: 'Surat, Gujarat',
     care: 'Hand wash cold. Hang to dry — do not fold wet.',
-    drape: { opacity: 70, fluid: 82, sheen: 34 },
     pinless: false,
     featured: false,
     published: true,
@@ -424,7 +410,6 @@ export const PRODUCTS = [
     weight: 214,
     origin: 'Ludhiana, Punjab',
     care: 'Machine wash cold. Do not tumble dry.',
-    drape: { opacity: 99, fluid: 44, sheen: 10 },
     pinless: true,
     featured: false,
     published: true,
@@ -454,7 +439,6 @@ export const PRODUCTS = [
     weight: 142,
     origin: 'Dyed in Bhuj, Gujarat',
     care: 'First wash separately, cold. Colour settles after one wash.',
-    drape: { opacity: 90, fluid: 76, sheen: 16 },
     pinless: false,
     featured: false,
     published: true,
@@ -489,7 +473,6 @@ export const PRODUCTS = [
     weight: 120,
     origin: 'Tiruppur, Tamil Nadu',
     care: 'Machine wash warm.',
-    drape: { opacity: 100, fluid: 30, sheen: 2 },
     pinless: true,
     featured: false,
     published: true,
@@ -519,7 +502,6 @@ export const PRODUCTS = [
     weight: 34,
     origin: 'Assembled in Mumbai, Maharashtra',
     care: 'Keep away from cards and pacemakers.',
-    drape: { opacity: 0, fluid: 0, sheen: 40 },
     pinless: true,
     featured: false,
     published: true,

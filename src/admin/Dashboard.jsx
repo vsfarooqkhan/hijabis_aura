@@ -6,7 +6,6 @@ import useStore, { stockOf } from '../store/useStore'
 import { dailySeries, delta, money, num, sum, dateShort, ago } from '../lib/format'
 import { statusMeta } from '../data/settings'
 import { Badge } from '../components/ui'
-import { DrapeSignature } from '../components/DrapeMeter'
 import { PageHead, Panel, Stat, RevenueChart, OrdersBarChart, SplitDonut, DataTable } from './ui'
 import cx from '../lib/cx'
 

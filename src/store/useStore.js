@@ -218,7 +218,6 @@ export const useStore = create(
           weight: 140,
           origin: '',
           care: '',
-          drape: { opacity: 90, fluid: 70, sheen: 20 },
           pinless: false,
           featured: false,
           published: false,

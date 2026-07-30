@@ -21,7 +21,6 @@ const Admin = lazy(() => import('./admin/AdminRoutes'))
 const Checkout = lazy(() => import('./pages/Checkout'))
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })))
 const Contact = lazy(() => import('./pages/About').then((m) => ({ default: m.Contact })))
-const HowItFalls = lazy(() => import('./pages/Guides').then((m) => ({ default: m.HowItFalls })))
 const Styling = lazy(() => import('./pages/Guides').then((m) => ({ default: m.Styling })))
 const Care = lazy(() => import('./pages/Guides').then((m) => ({ default: m.Care })))
 const SizeGuide = lazy(() => import('./pages/Guides').then((m) => ({ default: m.SizeGuide })))
@@ -62,7 +61,6 @@ export default function App() {
           <Route path="track" element={page(TrackOrder)} />
           <Route path="wishlist" element={page(Wishlist)} />
           <Route path="search" element={page(Search)} />
-          <Route path="how-it-falls" element={page(HowItFalls)} />
           <Route path="styling" element={page(Styling)} />
           <Route path="care" element={page(Care)} />
           <Route path="size-guide" element={page(SizeGuide)} />

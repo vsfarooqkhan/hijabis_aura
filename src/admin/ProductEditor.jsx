@@ -8,7 +8,6 @@ import useStore, { stockOf } from '../store/useStore'
 import { COLORWAYS, imagesFor } from '../data/colorways.mjs'
 import { STYLE_FILTERS, OCCASION_FILTERS, WEAVE_LABELS, FABRIC_FILTERS } from '../data/collections'
 import { Badge, Field, Select, Toggle, Checkbox, Swatch } from '../components/ui'
-import { DrapeMeterInput, DrapeSignature } from '../components/DrapeMeter'
 import WeaveDiagram from '../components/WeaveDiagram'
 import ImageManager from './ImageManager'
 import { PageHead, Panel } from './ui'
@@ -378,18 +377,6 @@ export default function ProductEditor() {
             </div>
           </Panel>
 
-          {/* -------------------------------------------------- drape read --- */}
-          <Panel
-            title="Drape read"
-            sub="The three measured scales shown on the product page"
-          >
-            <DrapeMeterInput drape={draft.drape} onChange={(drape) => set({ drape })} />
-            <div className="mt-6 border-t border-ink/10 pt-5">
-              <p className="spec-key mb-2">Reads on a card as</p>
-              <DrapeSignature drape={draft.drape} />
-            </div>
-          </Panel>
-
           {/* -------------------------------------------------- colourways --- */}
           <Panel
             title="Colourways & images"
@@ -604,7 +591,6 @@ export default function ProductEditor() {
                   {draft.fabric}
                   {draft.gsm > 0 && ` · ${draft.gsm} GSM`}
                 </p>
-                <DrapeSignature drape={draft.drape} className="mt-3" />
               </div>
             ) : (
               <p className="text-sm text-taupe">Add an image to see the card preview.</p>

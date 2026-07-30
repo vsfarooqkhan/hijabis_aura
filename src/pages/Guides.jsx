@@ -1,163 +1,11 @@
-/** The editorial pages: the drape method, styling, care, size guide, FAQ. */
+/** The editorial pages: styling, care, size guide, FAQ and the policies. */
 import { Link, useParams } from 'react-router-dom'
-import { Ruler, Lightbulb, Waves, Sun, Instagram } from 'lucide-react'
+import { Ruler, Instagram } from 'lucide-react'
 import useStore, { publishedProducts } from '../store/useStore'
 import { Accordion, Eyebrow, Reveal, SectionHead } from '../components/ui'
-import DrapeMeter, { DIMENSIONS } from '../components/DrapeMeter'
-import WeaveDiagram from '../components/WeaveDiagram'
 import ProductCard from '../components/ProductCard'
 import { CARE_RULES, FAQS, SIZE_GUIDE, STYLING_STEPS, POLICIES } from '../data/content'
-import { WEAVE_LABELS } from '../data/collections'
 import NotFound from './NotFound'
-
-/* ------------------------------------------------------------ how it falls --- */
-
-const METHOD = [
-  {
-    icon: Sun,
-    dim: 'Opacity',
-    range: 'sheer 0 — 100 opaque',
-    how: 'One layer of cloth is laid over 10pt printed text and photographed from 30 cm under fixed light. We score how much of the text survives. Below 75 we would wear an under-cap; at 90 and above you do not need one.',
-  },
-  {
-    icon: Waves,
-    dim: 'Fall',
-    range: 'crisp 0 — 100 fluid',
-    how: 'The cloth is draped over a 90° studio edge with no weight added, and we measure the distance from the edge to where the first fold breaks. A short distance means it holds an architectural shape; a long one means it pours.',
-  },
-  {
-    icon: Lightbulb,
-    dim: 'Finish',
-    range: 'matte 0 — 100 lustre',
-    how: 'A single light at 45° and a fixed exposure. We measure the brightest return off the surface against a matte reference card. High numbers catch light in the folds, which reads as occasion wear.',
-  },
-]
-
-export function HowItFalls() {
-  const products = useStore(publishedProducts)
-  const extremes = [
-    products.reduce((a, b) => (b.drape.opacity > a.drape.opacity ? b : a), products[0]),
-    products.reduce((a, b) => (b.drape.fluid > a.drape.fluid ? b : a), products[0]),
-    products.reduce((a, b) => (b.drape.sheen > a.drape.sheen ? b : a), products[0]),
-  ].filter(Boolean)
-
-  const weaves = ['plain', 'twill', 'satin', 'jersey', 'tulle']
-
-  return (
-    <>
-      <header className="register-ink weave-ground py-16 md:py-24">
-        <div className="shell max-w-3xl">
-          <Eyebrow onInk className="mb-4 text-gold">
-            The method
-          </Eyebrow>
-          <h1 className="text-[2.4rem] leading-tight md:text-[3.4rem]">
-            How we measure the way a hijab falls
-          </h1>
-          <p className="mt-6 text-[17px] leading-relaxed text-blush/70">
-            Every hijab site tells you a fabric is “soft” and “flowy”. Those words mean nothing you
-            can compare. So we built three scales, measured every piece against the same reference
-            cloth under the same light, and published the numbers — including the unflattering ones.
-          </p>
-        </div>
-      </header>
-
-      <section className="shell py-16 md:py-24">
-        <SectionHead
-          eyebrow="Three scales"
-          title="What each number is measuring"
-          blurb="Not opinion, and not the mill's marketing sheet. Our own bench, same conditions every time."
-        />
-
-        <div className="grid gap-10 lg:grid-cols-3">
-          {METHOD.map((m, i) => (
-            <Reveal key={m.dim} delay={i * 0.08}>
-              <div className="border-t-2 border-ink pt-6">
-                <m.icon size={20} strokeWidth={1.5} className="mb-4 text-gold-deep" />
-                <p className="font-mono text-2xs uppercase tracking-[0.14em] text-gold-deep">{m.range}</p>
-                <h3 className="display-sm mt-2 text-xl">{m.dim}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-ink/75">{m.how}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="register-cocoa weave-ground py-16 md:py-24">
-        <div className="shell">
-          <SectionHead
-            onInk
-            eyebrow="Read together"
-            title="The three numbers only mean something as a set"
-            blurb="A 62 GSM chiffon and a 240 GSM ribbed jersey can both be right — for completely different days. Here is the extreme of each scale in our own catalogue."
-          />
-
-          <div className="grid gap-8 lg:grid-cols-3">
-            {/* Keyed by dimension, not product — one piece can top two scales. */}
-            {extremes.map((p, i) => (
-              <Reveal key={DIMENSIONS[i].key} delay={i * 0.08}>
-                <div className="border border-blush/12 bg-ink/40 p-6">
-                  <p className="eyebrow mb-3 text-gold">
-                    Highest {DIMENSIONS[i].label.toLowerCase()} we make
-                  </p>
-                  <Link to={`/product/${p.slug}`} className="display-sm text-lg text-blush link-selvedge">
-                    {p.name}
-                  </Link>
-                  <p className="mt-1.5 font-mono text-2xs uppercase tracking-[0.1em] text-blush/45">
-                    {p.fabric} · {p.gsm} GSM
-                  </p>
-                  <DrapeMeter drape={p.drape} onInk className="mt-5" />
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="shell py-16 md:py-24">
-        <SectionHead
-          eyebrow="Structure"
-          title="Five ways to interlace a yarn"
-          blurb="The weave decides more about behaviour than the fibre does. These diagrams are drawn from the actual interlacing, not decoration."
-        />
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {weaves.map((w, i) => (
-            <Reveal key={w} delay={i * 0.06}>
-              <div className="border border-ink/12 bg-white p-5">
-                <WeaveDiagram weave={w} color="#96625A" size={72} className="mb-4" />
-                <h3 className="display-sm text-base">{WEAVE_LABELS[w]}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/70">
-                  {
-                    {
-                      plain: 'One over, one under. The most stable structure and the least drapey — chiffons and voiles.',
-                      twill: 'A diagonal float. Falls in long unbroken lines instead of small folds, which is why it reads as tailored.',
-                      satin: 'Long floats on one face. Maximum lustre, minimum grip — this is the one that slips.',
-                      jersey: 'Not woven at all. Interlocking loops, which is where the stretch comes from.',
-                      tulle: 'A hexagonal net. Almost no weight, which is why bead work can sit on it.',
-                    }[w]
-                  }
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-t border-ink/10 py-16">
-        <div className="shell max-w-2xl text-center">
-          <h2 className="text-3xl">Now go and read a label</h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-ink/70">
-            Every product page carries these three numbers, its weave diagram, its GSM and its
-            dimensions. Nothing is hidden behind “premium quality”.
-          </p>
-          <Link to="/shop" className="btn-ink mt-7">
-            Shop all hijabs
-          </Link>
-        </div>
-      </section>
-    </>
-  )
-}
 
 /* ----------------------------------------------------------------- styling --- */
 
@@ -186,10 +34,10 @@ export function Styling() {
             <Reveal key={s.name}>
               <article className="grid gap-6 border-t-2 border-ink pt-7 lg:grid-cols-[18rem_1fr] lg:gap-12">
                 <div>
-                  {/* Numbered because these are ordered by how long they take,
-                      shortest last — the order carries information. */}
+                  {/* These are alternatives, not a sequence, so each carries the
+                      time it takes rather than a rank. */}
                   <p className="font-mono text-2xs uppercase tracking-[0.14em] text-gold-deep">
-                    Method {String(i + 1).padStart(2, '0')} · {s.time}
+                    {s.time}
                   </p>
                   <h2 className="display-sm mt-2 text-2xl">{s.name}</h2>
                   <p className="mt-3 font-mono text-2xs leading-relaxed text-taupe">

@@ -26,13 +26,11 @@ const PRICE_BANDS = [
   { key: 'o2000', label: 'Over ₹2,000', test: (p) => p.price >= 2000 },
 ]
 
-const DRAPE_BANDS = [
-  { key: 'opaque', label: 'Fully opaque', test: (p) => p.drape.opacity >= 90 },
-  { key: 'sheer', label: 'Sheer', test: (p) => p.drape.opacity < 75 },
-  { key: 'fluid', label: 'Fluid fall', test: (p) => p.drape.fluid >= 78 },
-  { key: 'crisp', label: 'Holds a shape', test: (p) => p.drape.fluid < 55 },
-  { key: 'matte', label: 'Matte finish', test: (p) => p.drape.sheen < 35 },
-  { key: 'lustre', label: 'Lustre', test: (p) => p.drape.sheen >= 60 },
+/** Weight bands, from the GSM every mill prints on the roll. */
+const WEIGHT_BANDS = [
+  { key: 'light', label: 'Light — under 80 GSM', test: (p) => p.gsm > 0 && p.gsm < 80 },
+  { key: 'mid', label: 'Mid — 80 to 150 GSM', test: (p) => p.gsm >= 80 && p.gsm <= 150 },
+  { key: 'heavy', label: 'Heavy — over 150 GSM', test: (p) => p.gsm > 150 },
 ]
 
 export default function Shop() {
@@ -49,7 +47,7 @@ export default function Shop() {
       occasion: params.getAll('occasion'),
       family: params.getAll('family'),
       price: params.getAll('price'),
-      drape: params.getAll('drape'),
+      weight: params.getAll('weight'),
       pinless: params.get('pinless') === '1',
       inStock: params.get('inStock') === '1',
     }),
@@ -58,7 +56,7 @@ export default function Shop() {
 
   const activeCount =
     active.collection.length + active.style.length + active.occasion.length +
-    active.family.length + active.price.length + active.drape.length +
+    active.family.length + active.price.length + active.weight.length +
     (active.pinless ? 1 : 0) + (active.inStock ? 1 : 0)
 
   const toggle = (group, value) => {
@@ -93,7 +91,10 @@ export default function Shop() {
       if (active.family.length && !p.colorways.some((c) => active.family.includes(c.family))) return false
       if (active.price.length && !PRICE_BANDS.filter((b) => active.price.includes(b.key)).some((b) => b.test(p)))
         return false
-      if (active.drape.length && !DRAPE_BANDS.filter((b) => active.drape.includes(b.key)).every((b) => b.test(p)))
+      if (
+        active.weight.length &&
+        !WEIGHT_BANDS.filter((b) => active.weight.includes(b.key)).some((b) => b.test(p))
+      )
         return false
       if (active.pinless && !p.pinless) return false
       if (active.inStock && stockOf(p) === 0) return false
@@ -130,11 +131,11 @@ export default function Shop() {
             {products.length} pieces · {WEAVE_LABELS.plain}, twill, satin, jersey and tulle
           </Eyebrow>
           <h1 className="max-w-3xl text-[2.4rem] leading-tight md:text-[3.4rem]">
-            Every hijab we make, with its numbers on the label
+            Every hijab we make, with its cloth on the label
           </h1>
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-blush/65">
-            Filter by how it should behave, not just how it looks. Opaque enough to skip a cap,
-            fluid enough to pour, matte enough for work.
+            Filter by fabric, weight and cut — the things that decide how a hijab wears. Fabric,
+            weave, GSM and exact dimensions are on every product page.
           </p>
         </div>
       </header>
@@ -292,15 +293,15 @@ function FilterPanel({ collections, active, toggle, setFlag, products }) {
         </div>
       </Group>
 
-      <Group title="How it should behave" note="Drape filters stack — each one narrows further.">
+      <Group title="Fabric weight" note="GSM is grams per square metre — the number the mill prints on the roll.">
         <div className="space-y-2.5">
-          {DRAPE_BANDS.map((b) => (
+          {WEIGHT_BANDS.map((b) => (
             <Checkbox
               key={b.key}
               label={b.label}
               hint={`${countBy(b.test)} pieces`}
-              checked={active.drape.includes(b.key)}
-              onChange={() => toggle('drape', b.key)}
+              checked={active.weight.includes(b.key)}
+              onChange={() => toggle('weight', b.key)}
             />
           ))}
         </div>

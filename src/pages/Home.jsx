@@ -5,7 +5,6 @@ import useStore, { publishedProducts } from '../store/useStore'
 import { COLORWAYS } from '../data/colorways.mjs'
 import { Eyebrow, Reveal, SectionHead, Stars, Badge } from '../components/ui'
 import ProductCard from '../components/ProductCard'
-import DrapeMeter, { DIMENSIONS } from '../components/DrapeMeter'
 import WeaveDiagram from '../components/WeaveDiagram'
 import { AuraMark } from '../components/Logo'
 import { money } from '../lib/format'
@@ -27,7 +26,7 @@ export default function Home() {
       <Hero product={hero} brand={brand} />
       <DyeRail />
       <FeaturedGrid products={featured} />
-      <HowItFalls />
+      <DyeCard />
       <CollectionsBand collections={collections} />
       <Bestsellers products={bestsellers} />
       <SpecPromise products={products} />
@@ -71,17 +70,17 @@ function Hero({ product, brand }) {
             </Eyebrow>
 
             <h1 className="text-[2.7rem] leading-[0.98] sm:text-6xl lg:text-[4.4rem]">
-              You cannot feel
+              Every hijab,
               <br />
-              a hijab through
+              with its cloth
               <br />
-              <span className="text-rose-light">a photograph.</span>
+              <span className="text-rose-light">on the label.</span>
             </h1>
 
             <p className="mt-7 max-w-lg text-[17px] leading-relaxed text-blush/70">
-              So we publish the numbers instead. Every piece carries its weave, its GSM, and a
-              three-part read on how it actually falls — sheer to opaque, crisp to fluid, matte to
-              lustre. Read it before you buy it.
+              Fabric, weave, weight in GSM and the exact dimensions — on every product page, not
+              buried in an email. Plus the dye code, so the colour you loved two years ago is still
+              findable. No “premium quality”, no guessing.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -89,8 +88,8 @@ function Hero({ product, brand }) {
                 Shop all hijabs
                 <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
-              <Link to="/how-it-falls" className="btn-outline-blush">
-                How the drape read works
+              <Link to="/collections/everyday-modal" className="btn-outline-blush">
+                Start with Everyday Modal
               </Link>
             </div>
 
@@ -132,7 +131,22 @@ function Hero({ product, brand }) {
                   </span>
                 </div>
 
-                <DrapeMeter drape={product.drape} onInk className="mt-5" />
+                {/* The spec block, straight off the mill's own sheet. */}
+                <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-blush/12 pt-4">
+                  {[
+                    ['Weight', `${product.gsm} GSM`],
+                    ['Size', `${product.size.w} × ${product.size.l} cm`],
+                    ['Weave', WEAVE_LABELS[product.weave]],
+                    ['Woven in', product.origin],
+                  ].map(([k, v]) => (
+                    <div key={k}>
+                      <dt className="font-mono text-2xs uppercase tracking-[0.12em] text-blush/45">
+                        {k}
+                      </dt>
+                      <dd className="mt-0.5 font-mono text-[13px] text-blush/90">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
             </Link>
           </motion.div>
@@ -196,69 +210,49 @@ function FeaturedGrid({ products }) {
   )
 }
 
-/* -------------------------------------------------- how it falls (dark) --- */
+/* --------------------------------------------------------- the dye card --- */
 
-function HowItFalls() {
-  const samples = [
-    { drape: { opacity: 96, fluid: 58, sheen: 8 }, name: 'Cotton-modal jersey', weave: 'jersey', gsm: 180 },
-    { drape: { opacity: 72, fluid: 84, sheen: 22 }, name: 'Crinkle chiffon', weave: 'plain', gsm: 62 },
-    { drape: { opacity: 88, fluid: 92, sheen: 86 }, name: 'Satin-back crepe', weave: 'satin', gsm: 105 },
-  ]
-
+/**
+ * The dye card. Every colour the label has run, each with its mill code — which
+ * is the thing that makes "the green from that post two years ago" findable.
+ */
+function DyeCard() {
   return (
     <section className="register-cocoa weave-ground py-20 md:py-28">
       <div className="shell">
         <SectionHead
           onInk
-          eyebrow="The signature"
-          title="Three numbers, and you know how it falls"
-          blurb="A photograph flattens fabric. These three scales are the ones we could not find on any other hijab site, so we measured them ourselves — on every piece, in our own studio, against the same reference cloth."
+          eyebrow={`${COLORWAYS.length} colourways, each with a code`}
+          title="The dye card"
+          blurb="Colour is the hardest thing to describe over a phone. So every colour we run gets a code that stays with it — on the product page, on the folded piece, and on the tag in the box. Send us a screenshot and we can tell you exactly which one it is."
         />
 
-        <div className="grid gap-10 lg:grid-cols-3">
-          {samples.map((s, i) => (
-            <Reveal key={s.name} delay={i * 0.1}>
-              <div className="border border-blush/12 bg-ink/40 p-6">
-                <div className="mb-6 flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="display-sm text-lg text-blush">{s.name}</h3>
-                    <p className="mt-1 font-mono text-2xs uppercase tracking-[0.1em] text-blush/45">
-                      {WEAVE_LABELS[s.weave]} · {s.gsm} GSM
-                    </p>
-                  </div>
-                  <WeaveDiagram weave={s.weave} color="#B8894F" size={52} className="shrink-0 opacity-80" />
-                </div>
-                <DrapeMeter drape={s.drape} onInk />
-              </div>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+          {COLORWAYS.map((c, i) => (
+            <Reveal key={c.code} delay={Math.min(i * 0.02, 0.3)}>
+              <li>
+                <Link
+                  to={`/shop?family=${c.family}`}
+                  className="group block border border-blush/12 p-3 transition-colors hover:border-blush/40"
+                >
+                  <span
+                    className="block aspect-[4/3] w-full border border-black/10"
+                    style={{ background: c.hex }}
+                    aria-hidden="true"
+                  />
+                  <span className="mt-2.5 block font-mono text-2xs text-gold">{c.code}</span>
+                  <span className="mt-0.5 block font-mono text-2xs leading-snug text-blush/70">
+                    {c.name}
+                  </span>
+                </Link>
+              </li>
             </Reveal>
           ))}
-        </div>
-
-        <Reveal delay={0.2}>
-          <div className="mt-14 grid gap-6 border-t border-blush/12 pt-10 sm:grid-cols-3">
-            {DIMENSIONS.map((d, i) => (
-              <div key={d.key}>
-                <p className="mb-2 font-mono text-2xs uppercase tracking-[0.14em] text-gold">
-                  {d.low} → {d.high}
-                </p>
-                <h4 className="display-sm mb-2 text-base text-blush">{d.label}</h4>
-                <p className="text-sm leading-relaxed text-blush/60">
-                  {
-                    [
-                      'Held against printed 10pt text at 30 cm. 100 means you cannot read a word through a single layer.',
-                      'Draped over a 90° studio edge and measured where the fold breaks. Low holds an edge; high pours.',
-                      'Photographed under one fixed light at 45°. Low scatters it; high returns it.',
-                    ][i]
-                  }
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+        </ul>
 
         <div className="mt-10">
-          <Link to="/how-it-falls" className="btn-outline-blush group">
-            Read the full method
+          <Link to="/shop" className="btn-outline-blush group">
+            Shop by colour
             <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
@@ -340,7 +334,7 @@ function Bestsellers({ products }) {
 function SpecPromise({ products }) {
   const stats = [
     { k: 'Colourways on the dye card', v: COLORWAYS.length },
-    { k: 'Pieces published with a full spec', v: products.length },
+    { k: 'Pieces with a full mill spec', v: products.length },
     { k: 'GSM range we stock', v: '48–240' },
     { k: 'Mills we buy from', v: 7 },
   ]
@@ -405,7 +399,7 @@ function TrustRow({ shipping }) {
     { icon: Truck, t: 'Free over ₹999', b: `${shipping.standardDays} standard, ${shipping.expressDays} express` },
     { icon: BadgeIndianRupee, t: 'COD or UPI', b: 'Pay on delivery, or 5% off when you prepay' },
     { icon: RotateCcw, t: '7-day returns', b: 'Unworn, tags on. Bridal is final sale' },
-    { icon: Ruler, t: 'Every spec published', b: 'Weave, GSM, dimensions and drape on every page' },
+    { icon: Ruler, t: 'Every spec published', b: 'Fabric, weave, GSM and exact dimensions on every page' },
   ]
 
   return (

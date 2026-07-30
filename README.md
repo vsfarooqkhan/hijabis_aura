@@ -20,49 +20,58 @@ Deploying to Vercel: import the repo, framework preset **Vite**, and you're done
 
 ## The design idea
 
-A photograph flattens fabric. Every hijab site says "soft" and "flowy", which is not
-comparable to anything. So this store publishes numbers instead:
+Most hijab sites describe fabric as "soft" and "premium quality", which tells a buyer
+nothing. This one publishes the actual specification instead — **fabric, weave, weight in
+GSM, exact dimensions, composition, where it was woven, and how to wash it** — on every
+product page rather than buried in a reply to a DM.
 
-**The Drape Meter** — three measured scales on every product, drawn as warp threads
-rather than progress bars, with the dye bleeding out over the last few threads:
+That is information a supplier already gives you, so it costs nothing to pass on and
+there is nothing to justify.
 
-| Scale | 0 | 100 |
-|---|---|---|
-| Opacity | sheer | opaque |
-| Fall | crisp | fluid |
-| Finish | matte | lustre |
-
-That one idea drives the whole interface. It's the hero, it's a shop filter
-("fully opaque", "holds a shape"), it's on every card in plain language, and it's an
-editable input in the admin.
+The second idea is **the dye card**: every colour gets a code (`HA-04 Jade Deep`) that
+stays with it on the product page, the folded piece and the tag in the box. It answers the
+single hardest customer question — *"do you still have the green from that post?"*
 
 Supporting decisions:
 
-- **Two registers.** Espresso-dark sections for desire (hero, lookbook, editorial), blush
+- **Two registers.** Espresso-dark sections for desire (hero, dye card, editorial), blush
   cream for decision (shop grid, product pages, cart, checkout). Dark makes dyed cloth
   glow; light makes buying legible.
 - **Mono is reserved for mill data** — weave, GSM, dimensions, order numbers, dye codes.
-  Never for prose. The type system itself encodes "spec sheet".
+  Never for prose. The type system itself reads as a spec sheet.
 - **Palette and wordmark come from your roundel**: espresso `#241A18`, dusty rose
   `#96625A`, gold `#B8894F`, blush `#F7EFEC`. The two-tone **Hijabis**·*aura* split is
   reused everywhere the name appears.
-- **Weave diagrams are real.** `WeaveDiagram` draws the actual interlacing per cell, so a
-  twill product shows a twill, not a decorative texture.
+- **Weave diagrams are real.** `WeaveDiagram` draws the actual interlacing cell by cell,
+  so a twill product shows a twill, not a decorative texture.
 
----
+### A note on what was removed
+
+An earlier version of this build had a "Drape Meter" — three 0–100 scores per product
+(sheer↔opaque, crisp↔fluid, matte↔lustre) plus a page describing a measurement bench with
+a light meter and a printed reference card.
+
+**That was removed, and deliberately so.** The bench did not exist, so the scores and the
+method were claims the shop could not stand behind, and a 0–100 number implies a precision
+that no hands-on judgement can produce. Nothing in the site now asserts a measurement you
+have not actually taken. If you ever want qualitative guidance back, do it in words you can
+defend ("sheer", "holds a shape") and never as a score.
+
+The shop filter that used those scores is now a **GSM weight band** filter instead, which
+comes off the mill's own roll label.
 
 ## What's built
 
 ### Storefront
 `/` home · `/shop` (filters + sort) · `/collections/:slug` · `/product/:slug` ·
 `/cart` · `/checkout` · `/order/:id` · `/track` · `/wishlist` · `/search` ·
-`/how-it-falls` · `/styling` · `/care` · `/size-guide` · `/faq` · `/about` ·
+`/styling` · `/care` · `/size-guide` · `/faq` · `/about` ·
 `/contact` · `/policies/{shipping,returns,privacy,terms}` · 404
 
 - Multi-image carousel (Embla) with a desktop thumb rail, swipe on touch, and lightbox.
   **The image set swaps with the colourway** — on this catalogue the colour *is* the product.
-- Filters that describe behaviour, not just looks: opacity, fall, finish, cut, colour
-  family, occasion, price, pinless, in-stock. All filter state lives in the URL, so a
+- Filters on the things that decide how a hijab wears: collection, GSM weight band, cut,
+  colour family, occasion, price, pinless, in-stock. All filter state lives in the URL, so a
   filtered view is shareable.
 - Cart drawer with a free-shipping progress bar, quantity stepping against real stock,
   coupon codes, wishlist, recently viewed, PIN-code delivery estimate.
@@ -88,7 +97,7 @@ Sign in with any email and any password of 4+ characters.
   revenue so the trend line can't flatter the store.
 - **Product editor** — the full record is editable: name, slug, description, selling
   points, collection, cut, occasion tags, pricing, mill spec (fabric, weave, GSM,
-  dimensions, composition, origin, care), drape sliders, visibility flags, and a live card
+  dimensions, composition, origin, care), visibility flags, and a live card
   preview. Validation blocks publishing something broken.
 - **Multi-image manager, per colourway** — add any URL, **drag to reorder** (dnd-kit,
   with keyboard support), make-primary, remove, or restore the generated set. Image 1 is
@@ -114,8 +123,8 @@ photo a product page already points at:
 |---|---|
 | `drape` | the fall, lit from one side so the folds read |
 | `styled` | editorial silhouette, face left as negative space |
-| `flat` | folded on the studio ground with its dye-card tag |
-| `macro` | the weave at 4× |
+| `flat` | folded on a plain ground with its dye-card tag |
+| `macro` | the weave, close up |
 
 They look designed rather than placeholder, they cost ~500 KB total, and there's nothing
 to break offline. **Swap in real photography by pasting URLs in the admin image manager** —

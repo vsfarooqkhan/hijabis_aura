@@ -22,7 +22,6 @@ const COLUMNS = [
   {
     title: 'Learn',
     links: [
-      ['/how-it-falls', 'How it falls'],
       ['/styling', 'How to wear it'],
       ['/care', 'Fabric care'],
       ['/size-guide', 'Size guide'],
@@ -73,8 +72,8 @@ export default function Footer() {
             <Logo size="lg" tone="onInk" />
             <p className="mt-5 font-script text-2xl text-gold">{brand.tagline}</p>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-blush/60">
-              {brand.promise}. Every piece ships with its weave, GSM and drape on the label — the
-              same numbers you read before you bought it.
+              {brand.promise}. Fabric, weave, GSM and the exact dimensions are on every product
+              page, so you know what you are buying before it arrives.
             </p>
 
             <div className="mt-7 space-y-2.5 text-sm">

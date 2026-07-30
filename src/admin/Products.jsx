@@ -5,7 +5,6 @@ import { Plus, Eye, EyeOff, Copy } from 'lucide-react'
 import useStore, { stockOf } from '../store/useStore'
 import { money, num } from '../lib/format'
 import { Badge } from '../components/ui'
-import { DrapeSignature } from '../components/DrapeMeter'
 import { PageHead, DataTable } from './ui'
 import cx from '../lib/cx'
 
@@ -118,11 +117,6 @@ export default function Products() {
                 {collections.find((c) => c.slug === p.collection)?.name || p.collection}
               </span>
             ),
-          },
-          {
-            key: 'drape',
-            label: 'Drape',
-            render: (p) => <DrapeSignature drape={p.drape} className="w-32" />,
           },
           {
             key: 'colours',

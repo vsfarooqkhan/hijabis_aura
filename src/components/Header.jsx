@@ -11,7 +11,6 @@ const NAV = [
   { to: '/collections/everyday-modal', label: 'Everyday' },
   { to: '/collections/occasion-satin', label: 'Occasion' },
   { to: '/collections/bridal-atelier', label: 'Bridal' },
-  { to: '/how-it-falls', label: 'How it falls' },
   { to: '/about', label: 'Our story' },
 ]
 
@@ -256,7 +255,6 @@ function NavPanel({ open, onClose, brand }) {
               <h2 className="eyebrow mb-2 text-gold-deep">Know the cloth</h2>
               <ul>
                 {[
-                  ['/how-it-falls', 'How it falls'],
                   ['/styling', 'How to wear it'],
                   ['/care', 'Fabric care'],
                   ['/size-guide', 'Size guide'],

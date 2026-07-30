@@ -9,7 +9,6 @@ import useStore, { productBySlug, publishedProducts, reviewsFor, stockOf } from 
 import { WEAVE_LABELS } from '../data/collections'
 import { SHOT_LABELS, SHOTS } from '../data/colorways.mjs'
 import Gallery from '../components/Gallery'
-import DrapeMeter from '../components/DrapeMeter'
 import WeaveDiagram from '../components/WeaveDiagram'
 import ProductCard from '../components/ProductCard'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../components/ui'
 import { money, agoDays } from '../lib/format'
 import { isValidPincode } from '../lib/upi'
+import cx from '../lib/cx'
 import NotFound from './NotFound'
 
 export default function Product() {
@@ -228,22 +228,8 @@ export default function Product() {
 
           <PincodeCheck settings={settings} madeToOrder={product.madeToOrder} />
 
-          {/* --------------------------------------------- the drape read --- */}
-          <div className="mt-8 border border-ink/12 bg-white p-6">
-            <div className="mb-5 flex items-start justify-between gap-4">
-              <div>
-                <Eyebrow className="mb-1.5">How it falls</Eyebrow>
-                <h2 className="display-sm text-lg">Measured in our studio, not estimated</h2>
-              </div>
-              <Link to="/how-it-falls" className="shrink-0 font-mono text-2xs uppercase tracking-[0.12em] text-rose hover:text-rose-deep">
-                Method
-              </Link>
-            </div>
-            <DrapeMeter drape={product.drape} />
-          </div>
-
           {/* ---------------------------------------------- the mill spec --- */}
-          <div className="mt-6 border border-ink/12 bg-blush-warm p-6">
+          <div className="mt-8 border border-ink/12 bg-blush-warm p-6">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <Eyebrow className="mb-1.5">Mill spec</Eyebrow>
@@ -254,14 +240,14 @@ export default function Product() {
 
             <dl className="grid grid-cols-2 gap-x-6 gap-y-3.5">
               <Spec k="Fabric" v={product.fabric} />
-              <Spec k="Weave" v={WEAVE_LABELS[product.weave]} />
+              {/* Weave is the heading above, so it is not repeated here. */}
               {product.gsm > 0 && <Spec k="Weight" v={`${product.gsm} GSM`} />}
               {product.weight > 0 && <Spec k="Piece weight" v={`${product.weight} g`} />}
               <Spec
                 k="Dimensions"
                 v={product.size?.l ? `${product.size.w} × ${product.size.l} cm` : product.size?.note || '—'}
               />
-              <Spec k="Style" v={product.style} />
+              <Spec k="Cut" v={product.style} capitalize />
               <Spec k="Woven in" v={product.origin} className="col-span-2" />
               <Spec k="Composition" v={product.composition} className="col-span-2" />
             </dl>
@@ -428,12 +414,14 @@ export default function Product() {
 
 /* --------------------------------------------------------------- pieces --- */
 
-function Spec({ k, v, className }) {
+function Spec({ k, v, className, capitalize }) {
   if (!v) return null
   return (
     <div className={className}>
       <dt className="spec-key">{k}</dt>
-      <dd className="mt-0.5 font-mono text-[13px] capitalize">{v}</dd>
+      {/* Only single-word values are capitalised — running it over a
+          composition string turns "95% bamboo modal" into title case. */}
+      <dd className={cx('mt-0.5 font-mono text-[13px]', capitalize && 'capitalize')}>{v}</dd>
     </div>
   )
 }
