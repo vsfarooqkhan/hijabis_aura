@@ -146,42 +146,50 @@ IBM Plex Mono (data), Parisienne (the tagline only).
 
 ---
 
-## Wiring up a backend
+## The backend
 
-State lives in one Zustand store (`src/store/useStore.js`) persisted to localStorage.
-Every mutation is already a named action, so each becomes an API call:
+Live on Supabase Postgres. Migrations and the security model are documented in
+[supabase/README.md](supabase/README.md).
 
-| Replace | With |
+| Layer | File |
 |---|---|
-| `src/data/*` seeds | `GET /products`, `/orders`, `/customers`, … |
-| `placeOrder` | `POST /orders` |
-| `markPaid` | server-side UPI reconciliation (or a PSP webhook) |
-| `saveProduct` / `deleteProduct` | `PATCH`/`DELETE /products/:id` |
-| `signIn` in `AdminRoutes.jsx` | real auth + a route guard |
-| Contact form in `About.jsx` | `POST /enquiries` |
+| Client | `src/lib/supabase.js` |
+| Storefront reads + guest writes | `src/lib/api.js` |
+| Dashboard reads + writes | `src/lib/adminApi.js` |
+| State | `src/store/useStore.js` |
 
-Bump `SCHEMA` in the store whenever seeded data changes shape — persisted state wins over
-the seed, so without a bump a stale cached catalogue shadows new code.
+**What is server-owned:** products, collections, reviews, settings, orders,
+customers, coupons. Fetched on boot, never persisted — a stale local copy would
+shadow the database and make edits look as though they had silently failed.
 
-### Before taking real money
+**What is client-owned:** cart, wishlist, recently viewed, the applied coupon,
+and a short memory of orders placed on this device. These are persisted, because
+a guest's bag should survive a refresh and there is no account to store it
+against.
 
-1. **Replace the UPI VPA.** `src/data/settings.js` ships `hijabisaura@okicici` as a
-   placeholder. Funds go wherever it points.
-2. **Replace the admin sign-in.** It is a demo gate, not a security boundary, and the
-   dashboard is not protecting real data yet.
-3. UTR verification is manual by design. Keep a human on it, or move to a PSP with
-   webhooks.
-4. Add an OG image (`og:image`) — the meta tags are in place but there's no raster yet.
+The database is the security boundary, not the dashboard. Signing in proves who
+you are; a row in `public.admins` is what grants access. Prices, stock, shipping
+and COD fees are all recomputed by `place_order()` server-side, so nothing about
+money crosses the wire from the browser.
 
----
+### Environment
 
-## Notes
+`.env.local` for development, and the same two values in Vercel → Settings →
+Environment Variables for production (then redeploy):
 
-- **The brand name is taken from your roundel: "Hijabisaura", `@hijabisaura`.** Your brief
-  said "hijabAura", so if you want it the other way, change `brand.name` in
-  `src/data/settings.js` (or Admin → Settings) and it updates everywhere.
-- The logo is rebuilt as vectors in `src/components/Logo.jsx` — faithful in spirit, not a
-  pixel trace of the raster. If you have the original vector, drop it in and swap
-  `AuraMark`.
-- Responsive to 360px, keyboard-focusable throughout, and `prefers-reduced-motion` turns
-  off the ambient hero drift and the drape-meter stagger.
+```
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+```
+
+The publishable key is meant to be public — it ships in the bundle. Row level
+security is what protects the data.
+
+### Still to do
+
+- **Images** are still the generated SVGs in `public/img`. Move them to Supabase
+  Storage and paste the URLs into the admin image manager — no code change needed.
+- **Replace the placeholder mill specs** with your supplier's real figures.
+- **Replace the UPI VPA** in Admin → Settings before taking real money.
+- A payment gateway, if you ever want card payments and automatic verification.
+- Email/SMS notifications on dispatch.

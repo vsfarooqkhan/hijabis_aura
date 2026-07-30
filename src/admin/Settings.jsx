@@ -20,13 +20,22 @@ export default function Settings() {
   const returns = group('returns')
   const ops = group('ops')
 
-  const save = () => {
+  const [saving, setSaving] = useState(false)
+
+  const save = async () => {
     if (!/^[\w.\-]{2,}@[\w\-]{2,}$/.test(draft.payments.upiVpa)) {
       toast.error('That UPI ID does not look valid — it should look like name@bank.')
       return
     }
-    saveSettings(draft)
-    toast.success('Settings saved — the storefront picks them up immediately')
+    setSaving(true)
+    try {
+      await saveSettings(draft)
+      toast.success('Settings saved — the storefront picks them up immediately')
+    } catch (err) {
+      toast.error(err.message)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const sampleUpi = buildUpiLink({
@@ -42,9 +51,9 @@ export default function Settings() {
         title="Settings"
         sub="Everything here is read live by the storefront"
         action={
-          <button type="button" onClick={save} disabled={!dirty} className="btn-ink px-5 py-2.5">
+          <button type="button" onClick={save} disabled={!dirty || saving} className="btn-ink px-5 py-2.5">
             <Save size={15} />
-            {dirty ? 'Save settings' : 'Saved'}
+            {saving ? 'Saving…' : dirty ? 'Save settings' : 'Saved'}
           </button>
         }
       />

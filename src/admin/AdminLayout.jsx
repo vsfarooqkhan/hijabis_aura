@@ -94,22 +94,22 @@ export default function AdminLayout() {
             onClick={() => {
               if (
                 window.confirm(
-                  'Reset all demo data? Products, orders, coupons, reviews and settings go back to their seeded values, and your cart is emptied. This cannot be undone.'
+                  'Clear this browser\'s cart, saved items and recent orders, then reload from the database? Nothing on the server is changed.'
                 )
               ) {
                 resetDemoData()
-                toast.success('Demo data reset to seed values')
+                toast.success('Reloaded from the database')
               }
             }}
             className="flex w-full items-center gap-3 px-1 py-2 font-mono text-2xs uppercase tracking-[0.12em] text-blush/55 transition-colors hover:text-blush"
           >
             <RotateCcw size={13} />
-            Reset demo data
+            Reload from database
           </button>
           <button
             type="button"
-            onClick={() => {
-              signOut()
+            onClick={async () => {
+              await signOut()
               navigate('/admin/login')
             }}
             className="flex w-full items-center gap-3 px-1 py-2 font-mono text-2xs uppercase tracking-[0.12em] text-blush/55 transition-colors hover:text-blush"
@@ -136,8 +136,8 @@ export default function AdminLayout() {
         <div className="border-b border-gold/25 bg-gold-wash px-4 py-2.5 lg:px-8">
           <p className="flex items-start gap-2 font-mono text-2xs leading-relaxed text-gold-deep">
             <AlertTriangle size={13} className="mt-0.5 shrink-0" />
-            Demo dashboard — data lives in your browser only, and the sign-in is not a security
-            boundary. Both are replaced when the backend lands.
+            Live data. Everything you change here is written to the database and is visible to
+            customers immediately.
           </p>
         </div>
 
@@ -174,8 +174,8 @@ export default function AdminLayout() {
               <div className="border-t border-blush/10 p-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    signOut()
+                  onClick={async () => {
+                    await signOut()
                     navigate('/admin/login')
                   }}
                   className="flex w-full items-center gap-3 px-1 py-2 font-mono text-2xs uppercase tracking-[0.12em] text-blush/55"

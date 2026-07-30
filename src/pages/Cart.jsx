@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { ShoppingBag, Trash2, Truck, Tag, X, BadgeIndianRupee } from 'lucide-react'
@@ -14,15 +14,19 @@ export default function Cart() {
   const removeLine = useStore((s) => s.removeLine)
   const applyCoupon = useStore((s) => s.applyCoupon)
   const removeCoupon = useStore((s) => s.removeCoupon)
+  const revalidateCoupon = useStore((s) => s.revalidateCoupon)
   const settings = useStore((s) => s.settings)
   const products = useStore((s) => s.products.filter((p) => p.published))
   const recent = useStore((s) => s.recentlyViewed)
 
   const [code, setCode] = useState('')
+  const [checking, setChecking] = useState(false)
 
-  const submitCoupon = (e) => {
+  const submitCoupon = async (e) => {
     e.preventDefault()
-    const res = applyCoupon(code)
+    setChecking(true)
+    const res = await applyCoupon(code)
+    setChecking(false)
     if (res.ok) {
       toast.success(res.message)
       setCode('')
@@ -30,6 +34,12 @@ export default function Cart() {
       toast.error(res.message)
     }
   }
+
+  // The bag can change after a code is applied, so re-check it against the new
+  // subtotal rather than promising a discount checkout will refuse.
+  useEffect(() => {
+    revalidateCoupon()
+  }, [totals.subtotal, revalidateCoupon])
 
   const suggestions = products
     .filter((p) => p.collection === 'essentials' && !lines.some((l) => l.productId === p.id))
@@ -193,8 +203,12 @@ export default function Cart() {
                     placeholder="AURA10"
                     className="field-boxed font-mono uppercase"
                   />
-                  <button type="submit" className="btn-outline px-4 py-2.5 text-2xs uppercase tracking-[0.12em]">
-                    Apply
+                  <button
+                    type="submit"
+                    disabled={checking}
+                    className="btn-outline px-4 py-2.5 text-2xs uppercase tracking-[0.12em]"
+                  >
+                    {checking ? 'Checking…' : 'Apply'}
                   </button>
                 </div>
               )}

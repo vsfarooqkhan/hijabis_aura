@@ -1,7 +1,9 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import { AlertTriangle } from 'lucide-react'
 import Layout from './components/Layout'
+import useStore from './store/useStore'
 
 // The buying funnel loads eagerly — these are the pages that must feel instant.
 import Home from './pages/Home'
@@ -45,7 +47,49 @@ const page = (Component, label) => (
   </Suspense>
 )
 
+/** Shown only if the catalogue cannot be reached at all. */
+function CatalogueDown({ message, onRetry }) {
+  return (
+    <div className="grid min-h-screen place-items-center bg-blush px-6">
+      <div className="max-w-md text-center">
+        <AlertTriangle size={24} className="mx-auto mb-5 text-gold-deep" strokeWidth={1.5} />
+        <h1 className="display-sm text-xl">We cannot reach the catalogue</h1>
+        <p className="mt-3 text-[15px] leading-relaxed text-ink/70">
+          The shop is up but the product data did not load. This is usually a connection blip.
+        </p>
+        <button type="button" onClick={onRetry} className="btn-ink mt-6">
+          Try again
+        </button>
+        {message && (
+          <p className="mt-6 break-words font-mono text-2xs leading-relaxed text-taupe">{message}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
+  const status = useStore((s) => s.status)
+  const error = useStore((s) => s.error)
+  const hydrate = useStore((s) => s.hydrate)
+  const restoreSession = useStore((s) => s.restoreSession)
+
+  // The catalogue lives in Postgres now, so it has to be fetched before the
+  // storefront can render anything. The admin session is restored in parallel so
+  // a refresh inside the dashboard does not sign you out.
+  useEffect(() => {
+    hydrate()
+    restoreSession()
+  }, [hydrate, restoreSession])
+
+  if (status === 'idle' || status === 'loading') {
+    return <Loading label="Loading the catalogue…" full />
+  }
+
+  if (status === 'error') {
+    return <CatalogueDown message={error} onRetry={hydrate} />
+  }
+
   return (
     <>
       <Routes>

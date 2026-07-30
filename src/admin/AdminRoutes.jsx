@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { ArrowRight, Lock } from 'lucide-react'
 import useStore from '../store/useStore'
@@ -15,6 +15,14 @@ import { NotFoundPage } from '../pages/Misc'
 
 export default function AdminRoutes() {
   const signedIn = useStore((s) => !!s.admin.email)
+  const adminStatus = useStore((s) => s.adminStatus)
+  const hydrateAdmin = useStore((s) => s.hydrateAdmin)
+
+  // Signing in only proves who you are; the dashboard still needs its data, and
+  // every one of those reads is authorised server-side by row level security.
+  useEffect(() => {
+    if (signedIn && adminStatus === 'idle') hydrateAdmin()
+  }, [signedIn, adminStatus, hydrateAdmin])
 
   return (
     <Routes>
@@ -37,29 +45,37 @@ export default function AdminRoutes() {
 }
 
 /**
- * Demo gate, not authentication. Any password gets you in — the point is to
- * show the shape of the screen. Real auth arrives with the backend, and this
- * component is where it plugs in.
+ * Real authentication now, against Supabase Auth. Being signed in is not by
+ * itself permission to do anything — every table and function checks for a row
+ * in `public.admins`, so an ordinary account gets a working session and no
+ * access whatsoever.
  */
 function Login() {
   const navigate = useNavigate()
   const signIn = useStore((s) => s.signIn)
   const brandName = useStore((s) => s.settings.brand.name)
-  const [email, setEmail] = useState('admin@hijabisaura.in')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setError('Enter the email you use for the dashboard.')
       return
     }
-    if (password.length < 4) {
-      setError('Any password of four characters or more works in this demo.')
+    if (!password) {
+      setError('Enter your password.')
       return
     }
-    signIn(email)
+    setBusy(true)
+    const res = await signIn(email, password)
+    setBusy(false)
+    if (!res.ok) {
+      setError(res.message || 'Those details were not accepted.')
+      return
+    }
     navigate('/admin', { replace: true })
   }
 
@@ -101,15 +117,15 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="btn-ink mt-6 w-full">
+          <button type="submit" disabled={busy} className="btn-ink mt-6 w-full">
             <Lock size={15} />
-            Sign in
-            <ArrowRight size={15} />
+            {busy ? 'Signing in…' : 'Sign in'}
+            {!busy && <ArrowRight size={15} />}
           </button>
 
           <p className="mt-5 border-t border-ink/10 pt-4 font-mono text-2xs leading-relaxed text-taupe">
-            Demo only — any password of four characters or more is accepted, and nothing here is a
-            security boundary. Data lives in this browser.
+            Use the account you created in Supabase. Access is granted by a row in the
+            <span className="text-ink"> admins </span> table, not by signing in.
           </p>
         </form>
       </div>

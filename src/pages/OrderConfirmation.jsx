@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Check, Package, Truck, Home, Clock, Instagram, MessageCircle } from 'lucide-react'
-import useStore from '../store/useStore'
+import useStore, { orderById } from '../store/useStore'
 import { money, dateLong } from '../lib/format'
 import { statusMeta, FULFILMENT_STEPS } from '../data/settings'
 import { Badge, Eyebrow } from '../components/ui'
@@ -11,7 +11,9 @@ const STEP_ICONS = { confirmed: Check, packed: Package, shipped: Truck, delivere
 
 export default function OrderConfirmation() {
   const { id } = useParams()
-  const order = useStore((s) => s.orders.find((o) => o.id === id))
+  // Anonymous visitors cannot read the orders table, so the confirmation is
+  // rendered from the copy kept on this device when the order was placed.
+  const order = useStore((s) => orderById(s, id))
   const brand = useStore((s) => s.settings.brand)
   const settings = useStore((s) => s.settings)
 

@@ -46,10 +46,14 @@ export default function Products() {
         action={
           <button
             type="button"
-            onClick={() => {
-              const draft = createProduct()
-              toast.success('Draft created')
-              navigate(`/admin/products/${draft.id}`)
+            onClick={async () => {
+              try {
+                const draft = await createProduct()
+                toast.success('Draft created')
+                navigate(`/admin/products/${draft.id}`)
+              } catch (err) {
+                toast.error(err.message)
+              }
             }}
             className="btn-ink px-5 py-2.5"
           >
@@ -164,9 +168,13 @@ export default function Products() {
               <div className="flex items-center justify-end gap-1">
                 <button
                   type="button"
-                  onClick={() => {
-                    saveProduct({ ...p, published: !p.published })
-                    toast.success(p.published ? `${p.name} unpublished` : `${p.name} is live`)
+                  onClick={async () => {
+                    try {
+                      await saveProduct({ ...p, published: !p.published })
+                      toast.success(p.published ? `${p.name} unpublished` : `${p.name} is live`)
+                    } catch (err) {
+                      toast.error(err.message)
+                    }
                   }}
                   title={p.published ? 'Unpublish' : 'Publish'}
                   aria-label={p.published ? `Unpublish ${p.name}` : `Publish ${p.name}`}
@@ -176,11 +184,15 @@ export default function Products() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    const copy = duplicateProduct(p.id)
-                    if (copy) {
-                      toast.success('Duplicated as a draft')
-                      navigate(`/admin/products/${copy.id}`)
+                  onClick={async () => {
+                    try {
+                      const copy = await duplicateProduct(p.id)
+                      if (copy) {
+                        toast.success('Duplicated as a draft')
+                        navigate(`/admin/products/${copy.id}`)
+                      }
+                    } catch (err) {
+                      toast.error(err.message)
                     }
                   }}
                   title="Duplicate"

@@ -37,6 +37,7 @@ export default function ProductEditor() {
   const [draft, setDraft] = useState(stored)
   const [colorIndex, setColorIndex] = useState(0)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   // Re-seed the local draft when the route changes to a different product.
   useEffect(() => {
@@ -44,15 +45,13 @@ export default function ProductEditor() {
     setColorIndex(0)
   }, [id, stored?.id])
 
-  if (!stored || !draft) return <NotFound />
+  const slugTaken = !!draft && allProducts.some((p) => p.slug === draft.slug && p.id !== draft.id)
 
-  const dirty = JSON.stringify(draft) !== JSON.stringify(stored)
-  const set = (patch) => setDraft((d) => ({ ...d, ...patch }))
-  const colorway = draft.colorways[colorIndex]
-
-  const slugTaken = allProducts.some((p) => p.slug === draft.slug && p.id !== draft.id)
-
+  // Every hook has to run before the guard below — deleting a product re-renders
+  // this component with nothing to edit, and a hook behind an early return would
+  // change the hook count and crash instead of showing the 404.
   const problems = useMemo(() => {
+    if (!draft) return []
     const out = []
     if (!draft.name.trim()) out.push('Name is empty.')
     if (!draft.slug.trim()) out.push('URL slug is empty.')
@@ -65,13 +64,26 @@ export default function ProductEditor() {
     return out
   }, [draft, slugTaken])
 
-  const save = () => {
+  if (!stored || !draft) return <NotFound />
+
+  const dirty = JSON.stringify(draft) !== JSON.stringify(stored)
+  const set = (patch) => setDraft((d) => ({ ...d, ...patch }))
+  const colorway = draft.colorways[colorIndex]
+
+  const save = async () => {
     if (problems.length) {
       toast.error(problems[0])
       return
     }
-    saveProduct(draft)
-    toast.success(`${draft.name} saved`)
+    setSaving(true)
+    try {
+      await saveProduct(draft)
+      toast.success(`${draft.name} saved`)
+    } catch (err) {
+      toast.error(err.message)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const setColorway = (patch) =>
@@ -123,11 +135,15 @@ export default function ProductEditor() {
             )}
             <button
               type="button"
-              onClick={() => {
-                const copy = duplicateProduct(draft.id)
-                if (copy) {
-                  toast.success('Duplicated as a draft')
-                  navigate(`/admin/products/${copy.id}`)
+              onClick={async () => {
+                try {
+                  const copy = await duplicateProduct(draft.id)
+                  if (copy) {
+                    toast.success('Duplicated as a draft')
+                    navigate(`/admin/products/${copy.id}`)
+                  }
+                } catch (err) {
+                  toast.error(err.message)
                 }
               }}
               className="btn-outline px-4 py-2.5 text-2xs uppercase tracking-[0.1em]"
@@ -137,11 +153,14 @@ export default function ProductEditor() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                if (window.confirm(`Delete “${draft.name}” permanently? This cannot be undone.`)) {
-                  deleteProduct(draft.id)
+              onClick={async () => {
+                if (!window.confirm(`Delete “${draft.name}” permanently? This cannot be undone.`)) return
+                try {
+                  await deleteProduct(draft.id)
                   toast.success('Product deleted')
                   navigate('/admin/products')
+                } catch (err) {
+                  toast.error(err.message)
                 }
               }}
               className="btn-outline border-clay/30 px-4 py-2.5 text-2xs uppercase tracking-[0.1em] text-clay-deep hover:border-clay hover:bg-clay hover:text-white"
@@ -149,9 +168,14 @@ export default function ProductEditor() {
               <Trash2 size={14} />
               Delete
             </button>
-            <button type="button" onClick={save} disabled={!dirty} className="btn-ink px-5 py-2.5">
+            <button
+              type="button"
+              onClick={save}
+              disabled={!dirty || saving}
+              className="btn-ink px-5 py-2.5"
+            >
               <Save size={15} />
-              {dirty ? 'Save changes' : 'Saved'}
+              {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
             </button>
           </>
         }

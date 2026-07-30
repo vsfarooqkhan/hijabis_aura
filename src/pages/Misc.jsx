@@ -9,29 +9,58 @@ import useStore, { publishedProducts } from '../store/useStore'
 import ProductCard from '../components/ProductCard'
 import { EmptyState, Eyebrow, Field, Badge } from '../components/ui'
 import { money, dateOnly } from '../lib/format'
+import { trackOrderRemote } from '../lib/api'
 import { statusMeta } from '../data/settings'
 
 /* ------------------------------------------------------------ track order --- */
 
+/** Reshapes the tracking payload into the order shape this page renders. */
+const fromTracked = (res) => ({
+  id: res.order.id,
+  createdAt: res.order.created_at,
+  status: res.order.status,
+  courier: res.order.courier,
+  awb: res.order.awb,
+  shippingAddress: {
+    city: res.order.city,
+    state: res.order.state,
+    pincode: res.order.pincode,
+  },
+  totals: { grand: res.order.grand_total },
+  items: (res.items || []).map((i) => ({
+    productId: i.slug,
+    slug: i.slug,
+    name: i.name,
+    colorwayCode: i.colorway_name,
+    colorwayName: i.colorway_name,
+    hex: i.colorway_hex,
+    image: i.image_url,
+    price: i.unit_price,
+    qty: i.qty,
+  })),
+})
+
 export function TrackOrder() {
-  const orders = useStore((s) => s.orders)
   const brand = useStore((s) => s.settings.brand)
   const [id, setId] = useState('')
   const [contact, setContact] = useState('')
   const [found, setFound] = useState(undefined)
+  const [busy, setBusy] = useState(false)
 
-  const lookup = (e) => {
+  // The order number alone is not enough — the server requires a matching email
+  // or phone before it returns anything, so a guessed number reveals nothing.
+  const lookup = async (e) => {
     e.preventDefault()
-    const needle = id.trim().toUpperCase()
-    const order = orders.find((o) => o.id.toUpperCase() === needle)
-    // Both the order number and a matching email or phone are required, so one
-    // guessed order number does not expose someone else's address.
-    const c = contact.trim().toLowerCase()
-    const matches =
-      order &&
-      (order.customer.email.toLowerCase() === c ||
-        order.customer.phone.replace(/\D/g, '').endsWith(c.replace(/\D/g, '').slice(-10)))
-    setFound(matches ? order : null)
+    if (!id.trim() || !contact.trim()) return
+    setBusy(true)
+    try {
+      const res = await trackOrderRemote(id, contact)
+      setFound(res?.ok ? fromTracked(res) : null)
+    } catch {
+      setFound(null)
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -57,8 +86,8 @@ export function TrackOrder() {
           value={contact}
           onChange={(e) => setContact(e.target.value)}
         />
-        <button type="submit" className="btn-ink sm:col-span-2">
-          Find my order
+        <button type="submit" disabled={busy} className="btn-ink sm:col-span-2">
+          {busy ? 'Looking…' : 'Find my order'}
         </button>
       </form>
 
@@ -119,9 +148,7 @@ export function TrackOrder() {
             <span className="shrink-0 font-mono text-sm tabular-nums">{money(found.totals.grand)}</span>
           </div>
 
-          <Link to={`/order/${found.id}`} className="btn-outline mt-5 w-full">
-            See full order
-          </Link>
+
         </div>
       )}
     </div>

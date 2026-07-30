@@ -1,52 +1,103 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { nanoid } from 'nanoid'
-import { PRODUCTS } from '../data/products'
-import { COLLECTIONS } from '../data/collections'
-import { ORDERS, CUSTOMERS, COUPONS, REVIEWS } from '../data/orders'
 import { SETTINGS } from '../data/settings'
+import { fetchStorefront, fetchProducts, placeOrderRemote, validateCouponRemote } from '../lib/api'
+import {
+  adminFetchAll,
+  adminSaveProduct,
+  adminCreateProduct,
+  adminDeleteProduct,
+  adminSaveCollection,
+  adminDeleteCollection,
+  adminSaveCoupon,
+  adminDeleteCoupon,
+  adminSetReviewPublished,
+  adminDeleteReview,
+  adminUpdateOrder,
+  adminMarkPaid,
+  adminSaveSettings,
+} from '../lib/adminApi'
+import { supabase } from '../lib/supabase'
 
 /**
- * One store, persisted to localStorage. Admin edits and storefront reads hit
- * the same objects, which is why editing a product in the dashboard changes the
- * shop grid immediately.
+ * One store, split by who owns the data.
  *
- * Bump SCHEMA whenever the shape of seeded data changes — persisted state wins
- * over the seed, so without a bump an old cached catalogue would shadow new
- * code and the change would look like it silently failed.
+ *   Server-owned  products, collections, reviews, settings, orders, customers,
+ *                 coupons. Fetched from Postgres, never persisted — a stale
+ *                 local copy would shadow the database and make edits look
+ *                 like they had silently failed.
+ *
+ *   Client-owned  cart, wishlist, recently viewed, the applied coupon, and a
+ *                 short memory of orders you placed on this device. These are
+ *                 persisted, because a guest's bag should survive a refresh and
+ *                 there is no account to store it against.
  */
-const SCHEMA = 4
-
-const seed = () => ({
-  products: structuredClone(PRODUCTS),
-  collections: structuredClone(COLLECTIONS),
-  orders: structuredClone(ORDERS),
-  customers: structuredClone(CUSTOMERS),
-  coupons: structuredClone(COUPONS),
-  reviews: structuredClone(REVIEWS),
-  settings: structuredClone(SETTINGS),
-})
+const SCHEMA = 5
 
 export const lineKey = (productId, colorwayCode) => `${productId}::${colorwayCode}`
 
 export const useStore = create(
   persist(
     (set, get) => ({
-      ...seed(),
+      /* ------------------------------------------------- server-owned --- */
+      products: [],
+      collections: [],
+      reviews: [],
+      // Seeded so the header, footer and page titles render correctly on the
+      // very first paint, before the fetch lands. Replaced by the real row.
+      settings: SETTINGS,
+      orders: [],
+      customers: [],
+      coupons: [],
 
+      status: 'idle', // idle | loading | ready | error
+      error: null,
+      adminStatus: 'idle',
+
+      /* ------------------------------------------------- client-owned --- */
       cart: [],
       wishlist: [],
       recentlyViewed: [],
+      // The validated coupon, as returned by the server: { code, kind, value }.
       appliedCoupon: null,
-      admin: { email: null },
+      // Orders placed on this device, so the confirmation and tracking screens
+      // work without an account. Newest first, capped.
+      recentOrders: [],
+      admin: { email: null, userId: null },
+
       ui: { cartOpen: false, mobileNavOpen: false },
 
-      /* ------------------------------------------------------------ ui --- */
+      /* ---------------------------------------------------------- ui --- */
 
       setCartOpen: (cartOpen) => set((s) => ({ ui: { ...s.ui, cartOpen } })),
       setMobileNav: (mobileNavOpen) => set((s) => ({ ui: { ...s.ui, mobileNavOpen } })),
 
-      /* ---------------------------------------------------------- cart --- */
+      /* ----------------------------------------------------- loading --- */
+
+      hydrate: async () => {
+        if (get().status === 'loading') return
+        set({ status: 'loading', error: null })
+        try {
+          const { products, collections, settings, reviews } = await fetchStorefront()
+          set({ products, collections, reviews, settings, status: 'ready', error: null })
+        } catch (err) {
+          console.error('[Hijabisaura] Could not load the catalogue:', err)
+          set({ status: 'error', error: err.message || String(err) })
+        }
+      },
+
+      /** Pulls fresh stock and prices without blanking the screen. */
+      refreshProducts: async () => {
+        try {
+          const includeDrafts = !!get().admin.email
+          set({ products: await fetchProducts({ includeDrafts }) })
+        } catch (err) {
+          console.error('[Hijabisaura] Could not refresh products:', err)
+        }
+      },
+
+      /* -------------------------------------------------------- cart --- */
 
       addToCart: ({ productId, colorwayCode, qty = 1 }) => {
         const key = lineKey(productId, colorwayCode)
@@ -71,7 +122,7 @@ export const useStore = create(
 
       clearCart: () => set({ cart: [], appliedCoupon: null }),
 
-      /* ------------------------------------------------------ wishlist --- */
+      /* ---------------------------------------------------- wishlist --- */
 
       toggleWishlist: (productId) =>
         set((s) => ({
@@ -85,120 +136,167 @@ export const useStore = create(
           recentlyViewed: [productId, ...s.recentlyViewed.filter((id) => id !== productId)].slice(0, 8),
         })),
 
-      /* -------------------------------------------------------- coupon --- */
+      /* ------------------------------------------------------ coupon --- */
 
-      applyCoupon: (code) => {
-        const found = get().coupons.find(
-          (c) => c.code.toLowerCase() === String(code).trim().toLowerCase() && c.active
-        )
-        if (!found) return { ok: false, message: 'That code is not active. Check the spelling?' }
+      // Coupons are never readable by the browser — the table is denied to anon.
+      // The server validates and returns only what the cart needs to display.
+      applyCoupon: async (code) => {
         const { subtotal } = cartTotals(get())
-        if (subtotal < found.minOrder)
-          return {
-            ok: false,
-            message: `${found.code} needs a subtotal of ₹${found.minOrder}. You are ₹${
-              found.minOrder - subtotal
-            } short.`,
+        try {
+          const res = await validateCouponRemote(code, subtotal)
+          if (res?.ok) {
+            set({ appliedCoupon: { code: res.code, kind: res.kind, value: res.value } })
+            return { ok: true, message: res.message }
           }
-        set({ appliedCoupon: found.code })
-        return { ok: true, message: `${found.code} applied.` }
+          return { ok: false, message: res?.message || 'That code could not be applied.' }
+        } catch (err) {
+          return { ok: false, message: err.message || 'Could not check that code just now.' }
+        }
       },
 
       removeCoupon: () => set({ appliedCoupon: null }),
 
-      /* -------------------------------------------------------- orders --- */
+      /**
+       * Re-checks the held coupon against the current subtotal, and drops it if
+       * it no longer qualifies — otherwise the cart would promise a discount
+       * that checkout will refuse.
+       */
+      revalidateCoupon: async () => {
+        const held = get().appliedCoupon
+        if (!held) return
+        const { subtotal } = cartTotals(get())
+        try {
+          const res = await validateCouponRemote(held.code, subtotal)
+          if (!res?.ok) set({ appliedCoupon: null })
+        } catch {
+          // Leave it alone on a network blip; the server decides at checkout.
+        }
+      },
 
-      placeOrder: ({ customer, address, paymentMethod, shippingSpeed, notes, upiRef }) => {
+      /* ------------------------------------------------------ orders --- */
+
+      /**
+       * Sends items and an address; the database prices it. Nothing about money
+       * crosses the wire, so a tampered request cannot change what it costs.
+       */
+      placeOrder: async ({ customer, address, paymentMethod, shippingSpeed, notes, upiRef }) => {
         const s = get()
-        const totals = cartTotals(s, { paymentMethod, shippingSpeed })
-        const items = s.cart.map((line) => {
-          const p = s.products.find((x) => x.id === line.productId)
-          const c = p.colorways.find((x) => x.code === line.colorwayCode) || p.colorways[0]
-          return {
-            productId: p.id,
-            name: p.name,
-            slug: p.slug,
-            colorwayCode: c.code,
-            colorwayName: c.name,
-            hex: c.hex,
-            image: c.images[0],
-            price: p.price,
-            qty: line.qty,
-          }
+        const lines = cartLines(s)
+        const result = await placeOrderRemote({
+          customer,
+          address,
+          paymentMethod,
+          shippingSpeed,
+          notes,
+          upiRef,
+          couponCode: s.appliedCoupon?.code || null,
+          items: lines.map((l) => ({
+            productId: l.productId,
+            colorwayCode: l.colorwayCode,
+            qty: l.qty,
+          })),
         })
 
-        const id = `HA${Math.floor(30000 + Math.random() * 9000)}`
+        // Kept locally so the confirmation screen renders immediately — an
+        // anonymous visitor cannot read the orders table.
         const order = {
-          id,
+          id: result.order_id,
           createdAt: new Date().toISOString(),
-          // A UPI order is not confirmed until someone has matched the UTR to
-          // the bank statement, so it lands in the admin queue instead.
-          status: paymentMethod === 'upi' ? 'pending_payment' : 'confirmed',
-          customerId: null,
+          status: result.status,
           customer,
           shippingAddress: address,
-          items,
-          payment: {
-            method: paymentMethod,
-            paid: false,
-            upiRef: upiRef || null,
-            verifiedBy: null,
+          items: lines.map((l) => ({
+            productId: l.product.id,
+            name: l.product.name,
+            slug: l.product.slug,
+            colorwayCode: l.colorway.code,
+            colorwayName: l.colorway.name,
+            hex: l.colorway.hex,
+            image: l.colorway.images[0],
+            price: l.product.price,
+            qty: l.qty,
+          })),
+          payment: { method: paymentMethod, paid: false, upiRef: upiRef || null, verifiedBy: null },
+          totals: {
+            subtotal: result.subtotal,
+            shipping: result.shipping,
+            codFee: result.cod_fee,
+            discount: result.discount,
+            grand: result.grand_total,
           },
-          totals,
+          shippingSpeed,
           courier: null,
           awb: null,
           notes: notes || '',
-          shippingSpeed,
         }
 
-        // Stock comes down at order time, the same way it would server-side.
-        const products = s.products.map((p) => {
-          const lines = items.filter((it) => it.productId === p.id)
-          if (!lines.length) return p
-          return {
-            ...p,
-            colorways: p.colorways.map((c) => {
-              const l = lines.find((it) => it.colorwayCode === c.code)
-              return l ? { ...c, stock: Math.max(0, c.stock - l.qty) } : c
-            }),
-          }
-        })
+        set((st) => ({
+          cart: [],
+          appliedCoupon: null,
+          recentOrders: [order, ...st.recentOrders].slice(0, 10),
+        }))
 
-        set({ orders: [order, ...s.orders], products, cart: [], appliedCoupon: null })
+        // Stock has moved server-side; pull the new numbers.
+        get().refreshProducts()
         return order
       },
 
-      updateOrder: (id, patch) =>
-        set((s) => ({
-          orders: s.orders.map((o) => (o.id === id ? { ...o, ...patch } : o)),
-        })),
+      /* -------------------------------------------------------- admin --- */
 
-      markPaid: (id, { upiRef, verifiedBy = 'admin@hijabaura.in' } = {}) =>
-        set((s) => ({
-          orders: s.orders.map((o) =>
-            o.id === id
-              ? {
-                  ...o,
-                  status: o.status === 'pending_payment' ? 'confirmed' : o.status,
-                  payment: { ...o.payment, paid: true, upiRef: upiRef ?? o.payment.upiRef, verifiedBy },
-                }
-              : o
-          ),
-        })),
+      signIn: async (email, password) => {
+        if (!supabase) return { ok: false, message: 'Supabase is not configured.' }
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+        if (error) return { ok: false, message: error.message }
+        set({ admin: { email: data.user.email, userId: data.user.id } })
+        return { ok: true }
+      },
 
-      /* ------------------------------------------------------ products --- */
+      signOut: async () => {
+        if (supabase) await supabase.auth.signOut()
+        set({
+          admin: { email: null, userId: null },
+          orders: [],
+          customers: [],
+          coupons: [],
+          adminStatus: 'idle',
+        })
+        get().refreshProducts()
+      },
 
-      saveProduct: (product) =>
-        set((s) => {
-          const exists = s.products.some((p) => p.id === product.id)
-          return {
-            products: exists
-              ? s.products.map((p) => (p.id === product.id ? product : p))
-              : [{ ...product }, ...s.products],
-          }
-        }),
+      /** Restores an existing session on boot, so a refresh does not sign you out. */
+      restoreSession: async () => {
+        if (!supabase) return
+        const { data } = await supabase.auth.getSession()
+        const user = data?.session?.user
+        if (user) set({ admin: { email: user.email, userId: user.id } })
+        else set({ admin: { email: null, userId: null } })
+      },
 
-      createProduct: () => {
+      /** Loads everything the dashboard needs. Fails if you are not an admin. */
+      hydrateAdmin: async () => {
+        if (!get().admin.email) return
+        set({ adminStatus: 'loading' })
+        try {
+          const all = await adminFetchAll()
+          set({ ...all, adminStatus: 'ready', status: 'ready', error: null })
+        } catch (err) {
+          console.error('[Hijabisaura] Dashboard load failed:', err)
+          set({ adminStatus: 'error', error: err.message })
+        }
+      },
+
+      /* ------------------------------------------------- admin writes --- */
+      //
+      // Each of these writes to Postgres and then re-reads, so the screen always
+      // shows what the database actually holds rather than what we hoped it
+      // would hold. Every one throws if row level security refuses.
+
+      saveProduct: async (product) => {
+        await adminSaveProduct(product)
+        await get().hydrateAdmin()
+      },
+
+      createProduct: async () => {
         const id = `p-${nanoid(8)}`
         const draft = {
           id,
@@ -214,10 +312,12 @@ export const useStore = create(
           composition: '',
           weave: 'plain',
           gsm: 120,
-          size: { w: 75, l: 185 },
+          size: { w: 75, l: 185, note: '' },
           weight: 140,
           origin: '',
           care: '',
+          notes: [],
+          warning: '',
           pinless: false,
           featured: false,
           published: false,
@@ -225,102 +325,107 @@ export const useStore = create(
           reviewCount: 0,
           sold: 0,
           description: '',
-          notes: [],
           colorways: [],
         }
-        set((s) => ({ products: [draft, ...s.products] }))
+        await adminCreateProduct(draft)
+        await get().hydrateAdmin()
         return draft
       },
 
-      deleteProduct: (id) => set((s) => ({ products: s.products.filter((p) => p.id !== id) })),
+      deleteProduct: async (id) => {
+        await adminDeleteProduct(id)
+        await get().hydrateAdmin()
+      },
 
-      duplicateProduct: (id) => {
+      duplicateProduct: async (id) => {
         const p = get().products.find((x) => x.id === id)
         if (!p) return null
         const copy = structuredClone(p)
         copy.id = `p-${nanoid(8)}`
-        copy.slug = `${p.slug}-copy`
+        copy.slug = `${p.slug}-copy`.slice(0, 60)
         copy.name = `${p.name} (copy)`
         copy.published = false
         copy.sold = 0
         copy.reviewCount = 0
         copy.rating = 0
-        set((s) => ({ products: [copy, ...s.products] }))
+        await adminSaveProduct(copy)
+        await get().hydrateAdmin()
         return copy
       },
 
-      /* --------------------------------------------------- collections --- */
+      saveCollection: async (c) => {
+        await adminSaveCollection(c)
+        await get().hydrateAdmin()
+      },
 
-      saveCollection: (collection) =>
-        set((s) => ({
-          collections: s.collections.some((c) => c.slug === collection.slug)
-            ? s.collections.map((c) => (c.slug === collection.slug ? collection : c))
-            : [...s.collections, collection],
-        })),
+      deleteCollection: async (slug) => {
+        await adminDeleteCollection(slug)
+        await get().hydrateAdmin()
+      },
 
-      deleteCollection: (slug) =>
-        set((s) => ({ collections: s.collections.filter((c) => c.slug !== slug) })),
+      saveCoupon: async (c) => {
+        await adminSaveCoupon(c)
+        await get().hydrateAdmin()
+      },
 
-      /* ------------------------------------------------------- coupons --- */
+      deleteCoupon: async (code) => {
+        await adminDeleteCoupon(code)
+        await get().hydrateAdmin()
+      },
 
-      saveCoupon: (coupon) =>
-        set((s) => ({
-          coupons: s.coupons.some((c) => c.code === coupon.code)
-            ? s.coupons.map((c) => (c.code === coupon.code ? coupon : c))
-            : [coupon, ...s.coupons],
-        })),
+      setReviewPublished: async (id, published) => {
+        await adminSetReviewPublished(id, published)
+        await get().hydrateAdmin()
+      },
 
-      deleteCoupon: (code) => set((s) => ({ coupons: s.coupons.filter((c) => c.code !== code) })),
+      deleteReview: async (id) => {
+        await adminDeleteReview(id)
+        await get().hydrateAdmin()
+      },
 
-      /* ------------------------------------------------------- reviews --- */
+      updateOrder: async (id, patch) => {
+        await adminUpdateOrder(id, patch)
+        await get().hydrateAdmin()
+      },
 
-      setReviewPublished: (id, published) =>
-        set((s) => ({ reviews: s.reviews.map((r) => (r.id === id ? { ...r, published } : r)) })),
+      markPaid: async (id, opts = {}) => {
+        await adminMarkPaid(id, { verifiedBy: get().admin.email, ...opts })
+        await get().hydrateAdmin()
+      },
 
-      deleteReview: (id) => set((s) => ({ reviews: s.reviews.filter((r) => r.id !== id) })),
+      saveSettings: async (patch) => {
+        const merged = {
+          ...get().settings,
+          ...patch,
+          brand: { ...get().settings.brand, ...(patch.brand || {}) },
+          payments: { ...get().settings.payments, ...(patch.payments || {}) },
+          shipping: { ...get().settings.shipping, ...(patch.shipping || {}) },
+          returns: { ...get().settings.returns, ...(patch.returns || {}) },
+          ops: { ...get().settings.ops, ...(patch.ops || {}) },
+        }
+        await adminSaveSettings(merged)
+        set({ settings: merged })
+      },
 
-      addReview: (review) =>
-        set((s) => ({
-          reviews: [
-            { id: `r-${nanoid(6)}`, daysAgo: 0, verified: false, published: false, ...review },
-            ...s.reviews,
-          ],
-        })),
-
-      /* ------------------------------------------------------ settings --- */
-
-      saveSettings: (patch) =>
-        set((s) => ({
-          settings: {
-            ...s.settings,
-            ...patch,
-            brand: { ...s.settings.brand, ...(patch.brand || {}) },
-            payments: { ...s.settings.payments, ...(patch.payments || {}) },
-            shipping: { ...s.settings.shipping, ...(patch.shipping || {}) },
-            returns: { ...s.settings.returns, ...(patch.returns || {}) },
-            ops: { ...s.settings.ops, ...(patch.ops || {}) },
-          },
-        })),
-
-      /* ---------------------------------------------------------- auth --- */
-
-      // Mock gate only. Real auth arrives with the backend; nothing here is a
-      // security boundary and the dashboard is not protecting real data yet.
-      signIn: (email) => set({ admin: { email } }),
-      signOut: () => set({ admin: { email: null } }),
-
-      /* ---------------------------------------------------------- demo --- */
-
-      resetDemoData: () => set({ ...seed(), cart: [], wishlist: [], appliedCoupon: null }),
+      /** Clears only this browser's state. Server data is never reset from here. */
+      resetDemoData: () => {
+        set({ cart: [], wishlist: [], appliedCoupon: null, recentOrders: [], recentlyViewed: [] })
+        return get().admin.email ? get().hydrateAdmin() : get().hydrate()
+      },
     }),
     {
       name: 'hijabaura',
       version: SCHEMA,
-      migrate: (state, version) => (version === SCHEMA ? state : { ...state, ...seed() }),
-      partialize: (s) => {
-        const { ui, ...rest } = s
-        return rest
-      },
+      // Only client-owned state survives a refresh. Everything else is the
+      // server's, and is re-fetched on boot.
+      partialize: (s) => ({
+        cart: s.cart,
+        wishlist: s.wishlist,
+        recentlyViewed: s.recentlyViewed,
+        appliedCoupon: s.appliedCoupon,
+        recentOrders: s.recentOrders,
+      }),
+      migrate: () => ({}),
     }
   )
 )
@@ -342,18 +447,20 @@ export const cartLines = (s) =>
 export const cartCount = (s) => s.cart.reduce((n, l) => n + l.qty, 0)
 
 /**
- * The single source of truth for pricing. Checkout, cart and the order record
- * all call this, so a change to the COD fee cannot drift between screens.
+ * Pricing for display only. The database recomputes all of this in place_order,
+ * and its answer is the one that counts — so if these two ever disagree, this
+ * function is the one that is wrong.
  */
 export const cartTotals = (s, { paymentMethod = 'cod', shippingSpeed = 'standard' } = {}) => {
   const lines = cartLines(s)
   const subtotal = lines.reduce((n, l) => n + l.lineTotal, 0)
-  const { shipping: ship, payments } = s.settings
+  const ship = s.settings?.shipping || SETTINGS.shipping
+  const payments = s.settings?.payments || SETTINGS.payments
 
-  const coupon = s.coupons.find((c) => c.code === s.appliedCoupon && c.active)
+  const coupon = s.appliedCoupon
   let couponDiscount = 0
   let shippingWaived = false
-  if (coupon && subtotal >= coupon.minOrder) {
+  if (coupon) {
     if (coupon.kind === 'percent') couponDiscount = Math.round((subtotal * coupon.value) / 100)
     else if (coupon.kind === 'flat') couponDiscount = Math.min(coupon.value, subtotal)
     else if (coupon.kind === 'shipping') shippingWaived = true
@@ -392,5 +499,7 @@ export const stockOf = (product) =>
 
 export const reviewsFor = (s, productId) =>
   s.reviews.filter((r) => r.productId === productId && r.published)
+
+export const orderById = (s, id) => s.recentOrders.find((o) => o.id === id) || null
 
 export default useStore

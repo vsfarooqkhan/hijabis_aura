@@ -50,6 +50,7 @@ export default function Checkout() {
   const [utr, setUtr] = useState('')
   const [copied, setCopied] = useState(false)
   const [sameAsShipping, setSameAsShipping] = useState(true)
+  const [placing, setPlacing] = useState(false)
 
   const totals = useStore((s) => cartTotals(s, { paymentMethod: method, shippingSpeed: speed }))
 
@@ -94,7 +95,7 @@ export default function Checkout() {
     )
   }
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     if (codBlocked) {
       toast.error(
         `COD is available between ${money(settings.payments.codMinOrder)} and ${money(
@@ -119,8 +120,17 @@ export default function Checkout() {
     }
 
     if (method === 'cod') {
-      const order = placeOrder(payload)
-      navigate(`/order/${order.id}`, { replace: true })
+      setPlacing(true)
+      try {
+        const order = await placeOrder(payload)
+        navigate(`/order/${order.id}`, { replace: true })
+      } catch (err) {
+        // The server re-prices and re-checks stock, so it can legitimately
+        // refuse. Show its reason rather than a generic failure.
+        toast.error(err.message || 'Could not place the order. Please try again.')
+      } finally {
+        setPlacing(false)
+      }
       return
     }
 
@@ -132,13 +142,20 @@ export default function Checkout() {
     window.scrollTo({ top: 0 })
   }
 
-  const confirmUpi = () => {
+  const confirmUpi = async () => {
     if (!isValidUtr(utr)) {
       toast.error('The UPI reference is 12 digits. You will find it in your payment app history.')
       return
     }
-    const order = placeOrder({ ...draft, upiRef: utr.trim() })
-    navigate(`/order/${order.id}`, { replace: true })
+    setPlacing(true)
+    try {
+      const order = await placeOrder({ ...draft, upiRef: utr.trim() })
+      navigate(`/order/${order.id}`, { replace: true })
+    } catch (err) {
+      toast.error(err.message || 'Could not place the order. Please try again.')
+    } finally {
+      setPlacing(false)
+    }
   }
 
   const copyVpa = async () => {
@@ -257,9 +274,14 @@ export default function Checkout() {
                 12 digits, from your payment app’s transaction history.
               </p>
 
-              <button type="button" onClick={confirmUpi} className="btn-ink mt-4 w-full">
+              <button
+                type="button"
+                onClick={confirmUpi}
+                disabled={placing}
+                className="btn-ink mt-4 w-full"
+              >
                 <Lock size={15} />
-                I have paid — place my order
+                {placing ? 'Placing your order…' : 'I have paid — place my order'}
               </button>
 
               <p className="mt-3 font-mono text-2xs leading-relaxed text-taupe">
@@ -494,8 +516,12 @@ export default function Checkout() {
               <span className="font-mono text-2xl tabular-nums">{money(totals.grand)}</span>
             </div>
 
-            <button type="submit" className="btn-ink mt-5 w-full" disabled={codBlocked}>
-              {method === 'cod' ? 'Place order — pay on delivery' : `Continue to UPI — ${money(totals.grand)}`}
+            <button type="submit" className="btn-ink mt-5 w-full" disabled={codBlocked || placing}>
+              {placing
+                ? 'Placing your order…'
+                : method === 'cod'
+                  ? 'Place order — pay on delivery'
+                  : `Continue to UPI — ${money(totals.grand)}`}
             </button>
 
             <Link to="/cart" className="btn-ghost mt-1 w-full justify-center">
