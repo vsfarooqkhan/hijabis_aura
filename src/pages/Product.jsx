@@ -11,6 +11,7 @@ import { SHOT_LABELS, SHOTS } from '../data/colorways.mjs'
 import Gallery from '../components/Gallery'
 import WeaveDiagram from '../components/WeaveDiagram'
 import ProductCard from '../components/ProductCard'
+import ReviewForm from '../components/ReviewForm'
 import {
   Accordion, Badge, Eyebrow, PriceTag, QtyStepper, Reveal, SectionHead, Stars, Swatch, EmptyState,
 } from '../components/ui'
@@ -313,7 +314,7 @@ export default function Product() {
       <section id="reviews" className="border-t border-ink/10 py-16 md:py-24">
         <div className="shell">
           <SectionHead
-            eyebrow={`${reviews.length} published reviews`}
+            eyebrow={reviews.length ? `${reviews.length} published reviews` : 'Be the first'}
             title="What buyers said after wearing it"
             blurb={
               product.reviewCount > 0
@@ -323,11 +324,13 @@ export default function Product() {
           />
 
           {reviews.length === 0 ? (
-            <EmptyState
-              icon={Ruler}
-              title="No reviews yet"
-              body="This one is new on the card. If you buy it, tell us how it fell."
-            />
+            <div className="mx-auto max-w-2xl">
+              <p className="mb-6 text-center text-[15px] leading-relaxed text-ink/65">
+                Nobody has reviewed this one yet. If you have worn it, yours would be the first —
+                and the most useful.
+              </p>
+              <ReviewForm product={product} />
+            </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {reviews.slice(0, 6).map((r, i) => (
@@ -348,6 +351,12 @@ export default function Product() {
                   </figure>
                 </Reveal>
               ))}
+            </div>
+          )}
+
+          {reviews.length > 0 && (
+            <div className="mx-auto mt-12 max-w-2xl">
+              <ReviewForm product={product} />
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import { ArrowRight, Lock } from 'lucide-react'
+import { ArrowRight, Lock, ShieldAlert, Copy, Check } from 'lucide-react'
 import useStore from '../store/useStore'
 import Logo from '../components/Logo'
 import { Field } from '../components/ui'
@@ -24,6 +24,11 @@ export default function AdminRoutes() {
     if (signedIn && adminStatus === 'idle') hydrateAdmin()
   }, [signedIn, adminStatus, hydrateAdmin])
 
+  // Signed in, but the database does not recognise this account as an admin.
+  // Row level security filters rather than errors, so without this the dashboard
+  // would show empty tables and give no clue why.
+  if (signedIn && adminStatus === 'forbidden') return <NotAnAdmin />
+
   return (
     <Routes>
       <Route path="login" element={<Login />} />
@@ -41,6 +46,94 @@ export default function AdminRoutes() {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
+  )
+}
+
+/**
+ * Signed in, not authorised. Shows the exact SQL to fix it, with this session's
+ * real user id filled in, because the alternative — empty tables and silence —
+ * is impossible to diagnose from the outside.
+ */
+function NotAnAdmin() {
+  const admin = useStore((s) => s.admin)
+  const signOut = useStore((s) => s.signOut)
+  const hydrateAdmin = useStore((s) => s.hydrateAdmin)
+  const navigate = useNavigate()
+  const [copied, setCopied] = useState(false)
+
+  const sql = `insert into public.admins (user_id, email)\nvalues ('${admin.userId}', '${admin.email}');`
+
+  return (
+    <div className="grid min-h-screen place-items-center bg-ink px-5 py-12">
+      <div className="w-full max-w-xl bg-blush p-7">
+        <div className="mb-5 flex items-start gap-3">
+          <ShieldAlert size={20} className="mt-0.5 shrink-0 text-clay" />
+          <div>
+            <h1 className="display-sm text-xl">Signed in, but not an admin</h1>
+            <p className="mt-1.5 text-sm leading-relaxed text-ink/70">
+              Your password was accepted, so the account exists. The database just does not have it
+              on the admin list — which is why orders and customers come back empty rather than
+              refused.
+            </p>
+          </div>
+        </div>
+
+        <dl className="mb-5 space-y-1.5 border-y border-ink/10 py-4 font-mono text-2xs">
+          <div className="flex gap-2">
+            <dt className="w-16 shrink-0 text-taupe">Email</dt>
+            <dd className="break-all">{admin.email}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="w-16 shrink-0 text-taupe">User id</dt>
+            <dd className="break-all">{admin.userId}</dd>
+          </div>
+        </dl>
+
+        <p className="mb-2 text-sm text-ink/75">
+          Run this in the Supabase SQL Editor, then reload:
+        </p>
+        <pre className="overflow-x-auto border border-ink/12 bg-white p-3.5 font-mono text-2xs leading-relaxed">
+          {sql}
+        </pre>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(sql)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2200)
+              } catch {
+                /* the SQL is on screen to select by hand */
+              }
+            }}
+            className="btn-outline px-4 py-2.5"
+          >
+            {copied ? <Check size={15} /> : <Copy size={15} />}
+            {copied ? 'Copied' : 'Copy the SQL'}
+          </button>
+          <button type="button" onClick={hydrateAdmin} className="btn-ink px-5 py-2.5">
+            I have run it — try again
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              await signOut()
+              navigate('/admin/login')
+            }}
+            className="btn-ghost"
+          >
+            Sign out
+          </button>
+        </div>
+
+        <p className="mt-5 border-t border-ink/10 pt-4 font-mono text-2xs leading-relaxed text-taupe">
+          The SQL Editor runs as the service role, which is the only thing allowed to grant admin
+          access. That is deliberate — a stolen dashboard session cannot make itself more powerful.
+        </p>
+      </div>
+    </div>
   )
 }
 

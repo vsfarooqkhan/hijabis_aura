@@ -25,6 +25,21 @@ const fail = (error, what) => {
 
 /* -------------------------------------------------------------- reads --- */
 
+/**
+ * Asks the database whether this session is an admin.
+ *
+ * Worth a round trip of its own: row level security *filters* rather than
+ * errors, so a signed-in non-admin reading `orders` gets HTTP 200 and an empty
+ * array. Without this check the dashboard would show empty tables and no reason
+ * why — which is precisely how it failed the first time.
+ */
+export async function checkIsAdmin() {
+  guard()
+  const { data, error } = await supabase.rpc('is_admin')
+  if (error) throw new Error(error.message || 'Could not verify admin access')
+  return data === true
+}
+
 export async function adminFetchAll() {
   guard()
   const [products, collections, orders, customers, coupons, reviews, settings] = await Promise.all([

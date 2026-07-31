@@ -33,6 +33,9 @@ export default function AdminLayout() {
   const products = useStore((s) => s.products)
   const reviews = useStore((s) => s.reviews)
   const threshold = useStore((s) => s.settings.ops.lowStockThreshold)
+  const adminStatus = useStore((s) => s.adminStatus)
+  const error = useStore((s) => s.error)
+  const hydrateAdmin = useStore((s) => s.hydrateAdmin)
 
   useEffect(() => setOpen(false), [pathname])
 
@@ -133,13 +136,37 @@ export default function AdminLayout() {
           </Link>
         </header>
 
-        <div className="border-b border-gold/25 bg-gold-wash px-4 py-2.5 lg:px-8">
-          <p className="flex items-start gap-2 font-mono text-2xs leading-relaxed text-gold-deep">
-            <AlertTriangle size={13} className="mt-0.5 shrink-0" />
-            Live data. Everything you change here is written to the database and is visible to
-            customers immediately.
-          </p>
-        </div>
+        {/* A failed load would otherwise leave every table empty with the reason
+            only in the console — the exact failure that made orders look lost. */}
+        {adminStatus === 'error' ? (
+          <div className="border-b border-clay/30 bg-clay-wash px-4 py-3 lg:px-8">
+            <div className="flex items-start gap-2 text-clay-deep">
+              <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+              <div className="min-w-0">
+                <p className="text-sm">
+                  Could not load the dashboard, so these tables are empty — this is not your data
+                  missing.
+                </p>
+                <p className="mt-1 break-words font-mono text-2xs opacity-80">{error}</p>
+                <button
+                  type="button"
+                  onClick={hydrateAdmin}
+                  className="mt-2 font-mono text-2xs uppercase tracking-[0.12em] underline underline-offset-2"
+                >
+                  Try again
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="border-b border-gold/25 bg-gold-wash px-4 py-2.5 lg:px-8">
+            <p className="flex items-start gap-2 font-mono text-2xs leading-relaxed text-gold-deep">
+              <AlertTriangle size={13} className="mt-0.5 shrink-0" />
+              Live data. Everything you change here is written to the database and is visible to
+              customers immediately.
+            </p>
+          </div>
+        )}
 
         <div className="p-4 md:p-6 lg:p-8">
           <Outlet />

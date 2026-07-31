@@ -361,6 +361,9 @@ function SpecPromise({ products }) {
 /* --------------------------------------------------------------- voices --- */
 
 function Voices({ reviews }) {
+  // Nothing to quote yet — better to omit the section than to head an empty grid.
+  if (!reviews.length) return null
+
   return (
     <section className="shell py-20 md:py-28">
       <SectionHead

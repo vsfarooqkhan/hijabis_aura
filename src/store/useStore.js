@@ -5,6 +5,7 @@ import { SETTINGS } from '../data/settings'
 import { fetchStorefront, fetchProducts, placeOrderRemote, validateCouponRemote } from '../lib/api'
 import {
   adminFetchAll,
+  checkIsAdmin,
   adminSaveProduct,
   adminCreateProduct,
   adminDeleteProduct,
@@ -277,6 +278,13 @@ export const useStore = create(
         if (!get().admin.email) return
         set({ adminStatus: 'loading' })
         try {
+          // Check admin status explicitly first. RLS filters instead of
+          // erroring, so without this a non-admin would simply see empty
+          // tables and be left guessing.
+          if (!(await checkIsAdmin())) {
+            set({ adminStatus: 'forbidden' })
+            return
+          }
           const all = await adminFetchAll()
           set({ ...all, adminStatus: 'ready', status: 'ready', error: null })
         } catch (err) {
