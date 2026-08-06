@@ -399,8 +399,12 @@ function Voices({ reviews }) {
 
 function TrustRow({ shipping }) {
   const items = [
-    { icon: Truck, t: 'Free over ₹999', b: `${shipping.standardDays} standard, ${shipping.expressDays} express` },
-    { icon: BadgeIndianRupee, t: 'COD or UPI', b: 'Pay on delivery, or 5% off when you prepay' },
+    {
+      icon: Truck,
+      t: shipping.freeAbove > 0 ? `Free over ₹${shipping.freeAbove.toLocaleString('en-IN')}` : 'Free shipping',
+      b: `${shipping.standardDays} across India`,
+    },
+    { icon: BadgeIndianRupee, t: 'Pay by UPI', b: 'GPay, PhonePe, Paytm — and 5% off for prepaying' },
     { icon: RotateCcw, t: '7-day returns', b: 'Unworn, tags on. Bridal is final sale' },
     { icon: Ruler, t: 'Every spec published', b: 'Fabric, weave, GSM and exact dimensions on every page' },
   ]

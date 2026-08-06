@@ -1,15 +1,21 @@
 # Database
 
-Three migrations, run in order, in the **Supabase SQL Editor**. Paste each file,
-run it, check it succeeded, then move to the next.
+Run in order, in the **Supabase SQL Editor**. Paste each file, run it, check it
+succeeded, then move to the next.
 
 | File | What it does |
 |---|---|
 | `migrations/0001_schema.sql` | Tables, constraints, indexes, triggers |
 | `migrations/0002_rls_and_functions.sql` | **Privileges, row level security, and the server-side operations** |
 | `migrations/0003_seed.sql` | Dye card, collections, settings, coupons, catalogue |
+| `migrations/0004_upi_only_standard_shipping.sql` | Turns COD off, adds the express flag, re-creates `place_order` |
+| `migrations/0005_more_colorways.sql` | Takes the dye card from 22 colours to 56 |
+| `migrations/0006_image_storage.sql` | The `product-images` bucket and its policies |
 
-All three are safe to run more than once.
+All are safe to run more than once — **except 0003 once you have uploaded real
+photographs.** It replaces `product_images` wholesale, so re-running it would
+delete every uploaded URL and restore the generated placeholders. After your
+first real upload, treat 0003 as historical and change products in Admin.
 
 > **Do not stop after 0001.** Between 0001 and 0002 every table is wide open to
 > anyone holding the publishable key — which is everyone, because that key ships
@@ -24,6 +30,22 @@ npm run seed:sql
 Re-seeding never resets stock levels or overwrites orders.
 
 ---
+
+## Image uploads
+
+Photographs live in the `product-images` bucket: **public read, admin-only
+write**, enforced by storage policies in 0006 using the same `is_admin()` check
+as the rest of the schema.
+
+- 5 MB per file, and only JPEG, PNG, WebP, AVIF or SVG — set on the bucket, so
+  the limit holds even if the browser check is bypassed.
+- Objects are filed under `productId/colourwayCode/`, with a random suffix so
+  two files called `IMG_1234.jpg` never overwrite each other.
+- Removing an uploaded photo in Admin deletes the stored file too. Removing a
+  *pasted* URL only unlinks it — it was never ours to delete.
+
+Supabase's free tier includes 1 GB of storage. At roughly 200 KB per optimised
+web photo that is a few thousand images; the 5 GB tier is a paid upgrade.
 
 ## The security model
 

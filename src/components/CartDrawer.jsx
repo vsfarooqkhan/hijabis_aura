@@ -177,7 +177,7 @@ export default function CartDrawer() {
                     View full bag
                   </Link>
                   <p className="mt-3 text-center font-mono text-2xs text-taupe">
-                    COD available · 5% off when you pay by UPI
+                    Pay by UPI · 5% off
                   </p>
                 </footer>
               </>

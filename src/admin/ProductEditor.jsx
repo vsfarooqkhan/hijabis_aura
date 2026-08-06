@@ -522,6 +522,7 @@ export default function ProductEditor() {
                     <ImageManager
                       images={colorway.images}
                       colorwayCode={colorway.code}
+                      productId={draft.id}
                       onChange={(images) => setColorway({ images })}
                     />
                   </div>

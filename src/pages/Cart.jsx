@@ -239,7 +239,7 @@ export default function Cart() {
             <p className="mt-2 flex items-start gap-1.5 font-mono text-2xs leading-relaxed text-taupe">
               <BadgeIndianRupee size={13} className="mt-0.5 shrink-0 text-gold-deep" />
               Pay by UPI at checkout and take another{' '}
-              {settings.payments.prepaidDiscountPct}% off. COD adds ₹{settings.payments.codFee}.
+              {settings.payments.prepaidDiscountPct}% off.
             </p>
 
             <Link to="/checkout" className="btn-ink mt-5 w-full">

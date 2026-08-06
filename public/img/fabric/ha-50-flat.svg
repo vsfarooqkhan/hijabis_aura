@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Cocoa folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#796860"/>
+      <stop offset=".34" stop-color="#4A342A"/>
+      <stop offset="1" stop-color="#372721"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#796860"/>
+      <stop offset=".34" stop-color="#4A342A"/>
+      <stop offset="1" stop-color="#372721"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#796860"/>
+      <stop offset=".34" stop-color="#4A342A"/>
+      <stop offset="1" stop-color="#372721"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#d2ccc8"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M214.2 372H750.2V476H214.2A52 52 0 0 1 214.2 372Z" fill="url(#b0)"/>
+      <path d="M222.2 398H750.2" stroke="#30221e" stroke-width="1.4" opacity=".4"/>
+      <path d="M234.2 424H750.2" stroke="#30221e" stroke-width="1.4" opacity=".26"/>
+      <path d="M214.2 375H750.2" stroke="#92847d" stroke-width="2.4" opacity=".5"/>
+      <path d="M749.2 372V476" stroke="#2b1e1c" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M214.5 516H734.5V620H214.5A52 52 0 0 1 214.5 516Z" fill="url(#b1)"/>
+      <path d="M222.5 542H734.5" stroke="#30221e" stroke-width="1.4" opacity=".4"/>
+      <path d="M234.5 568H734.5" stroke="#30221e" stroke-width="1.4" opacity=".26"/>
+      <path d="M214.5 519H734.5" stroke="#92847d" stroke-width="2.4" opacity=".5"/>
+      <path d="M733.5 516V620" stroke="#2b1e1c" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M231.3 660H735.3V764H231.3A52 52 0 0 1 231.3 660Z" fill="url(#b2)"/>
+      <path d="M239.3 686H735.3" stroke="#30221e" stroke-width="1.4" opacity=".4"/>
+      <path d="M251.3 712H735.3" stroke="#30221e" stroke-width="1.4" opacity=".26"/>
+      <path d="M231.3 663H735.3" stroke="#92847d" stroke-width="2.4" opacity=".5"/>
+      <path d="M734.3 660V764" stroke="#2b1e1c" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#eb64NaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#4A342A"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-50</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">COCOA</text>
+</g>
+</svg>

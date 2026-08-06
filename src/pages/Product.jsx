@@ -60,6 +60,33 @@ export default function Product() {
     .slice(0, 4)
   const essentials = all.filter((p) => p.collection === 'essentials' && p.id !== product.id).slice(0, 2)
 
+  // "You may also like" has to earn its place next to the collection row above,
+  // so it looks *outside* this collection and scores on what the piece is for:
+  // shared occasions first, then a similar weight, then a similar price.
+  const alsoLike = all
+    .filter(
+      (p) =>
+        p.id !== product.id &&
+        p.collection !== product.collection &&
+        p.collection !== 'essentials'
+    )
+    .map((p) => {
+      const sharedOccasions = p.occasion.filter((o) => product.occasion.includes(o)).length
+      const gsmGap = product.gsm && p.gsm ? Math.abs(p.gsm - product.gsm) : 999
+      const priceGap = Math.abs(p.price - product.price)
+      return {
+        p,
+        score:
+          sharedOccasions * 100 +
+          Math.max(0, 60 - gsmGap) +
+          Math.max(0, 40 - priceGap / 50) +
+          (p.style === product.style ? 25 : 0),
+      }
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4)
+    .map((r) => r.p)
+
   const add = (thenCheckout = false) => {
     if (outOfStock) return
     addToCart({ productId: product.id, colorwayCode: colorway.code, qty })
@@ -212,12 +239,11 @@ export default function Product() {
           </button>
 
           <div className="mt-5 grid gap-2.5 border-y border-ink/10 py-5 sm:grid-cols-2">
-            <Perk icon={BadgeIndianRupee} title="Cash on delivery">
-              ₹{settings.payments.codFee} fee, on orders ₹{settings.payments.codMinOrder}–
-              {settings.payments.codMaxOrder}
-            </Perk>
             <Perk icon={ShieldCheck} title="UPI, GPay, PhonePe">
               Scan and pay — {settings.payments.prepaidDiscountPct}% off
+            </Perk>
+            <Perk icon={BadgeIndianRupee} title="No card needed">
+              Any UPI app. We verify each payment by hand
             </Perk>
             <Perk icon={Truck} title={`Free over ₹${settings.shipping.freeAbove}`}>
               {settings.shipping.standardDays}
@@ -361,6 +387,30 @@ export default function Product() {
           )}
         </div>
       </section>
+
+      {/* --------------------------------------------------- you may also like --- */}
+      {alsoLike.length > 0 && (
+        <section className="border-t border-ink/10 py-16 md:py-20">
+          <div className="shell">
+            <SectionHead
+              eyebrow="Chosen by what it is for, not what drawer it sits in"
+              title="You may also like"
+              action={
+                <Link to="/shop" className="btn-outline">
+                  Shop all
+                </Link>
+              }
+            />
+            <div className="grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-4">
+              {alsoLike.map((p, i) => (
+                <Reveal key={p.id} delay={(i % 4) * 0.06}>
+                  <ProductCard product={p} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* -------------------------------------------------------- related --- */}
       {related.length > 0 && (

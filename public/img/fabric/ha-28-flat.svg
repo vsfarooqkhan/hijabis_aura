@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Apricot folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ecbd90"/>
+      <stop offset=".34" stop-color="#E5A76B"/>
+      <stop offset="1" stop-color="#a4774f"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ecbd90"/>
+      <stop offset=".34" stop-color="#E5A76B"/>
+      <stop offset="1" stop-color="#a4774f"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ecbd90"/>
+      <stop offset=".34" stop-color="#E5A76B"/>
+      <stop offset="1" stop-color="#a4774f"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#e4dacf"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M214.5 372H750.5V476H214.5A52 52 0 0 1 214.5 372Z" fill="url(#b0)"/>
+      <path d="M222.5 398H750.5" stroke="#896444" stroke-width="1.4" opacity=".4"/>
+      <path d="M234.5 424H750.5" stroke="#896444" stroke-width="1.4" opacity=".26"/>
+      <path d="M214.5 375H750.5" stroke="#efc9a4" stroke-width="2.4" opacity=".5"/>
+      <path d="M749.5 372V476" stroke="#78583c" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M223.9 516H743.9V620H223.9A52 52 0 0 1 223.9 516Z" fill="url(#b1)"/>
+      <path d="M231.9 542H743.9" stroke="#896444" stroke-width="1.4" opacity=".4"/>
+      <path d="M243.9 568H743.9" stroke="#896444" stroke-width="1.4" opacity=".26"/>
+      <path d="M223.9 519H743.9" stroke="#efc9a4" stroke-width="2.4" opacity=".5"/>
+      <path d="M742.9 516V620" stroke="#78583c" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M212.6 660H716.6V764H212.6A52 52 0 0 1 212.6 660Z" fill="url(#b2)"/>
+      <path d="M220.6 686H716.6" stroke="#896444" stroke-width="1.4" opacity=".4"/>
+      <path d="M232.6 712H716.6" stroke="#896444" stroke-width="1.4" opacity=".26"/>
+      <path d="M212.6 663H716.6" stroke="#efc9a4" stroke-width="2.4" opacity=".5"/>
+      <path d="M715.6 660V764" stroke="#78583c" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#f36aNaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#E5A76B"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-28</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">APRICOT</text>
+</g>
+</svg>

@@ -205,6 +205,7 @@ export default function Settings() {
             />
             <Toggle
               label="Accept cash on delivery"
+              hint="Off. The storefront shows UPI only, and the database refuses a COD order while this is off."
               checked={draft.payments.codEnabled}
               onChange={(codEnabled) => payments({ codEnabled })}
             />
@@ -274,6 +275,15 @@ export default function Settings() {
               value={draft.shipping.dispatchNote}
               onChange={(e) => shipping({ dispatchNote: e.target.value })}
               className="sm:col-span-2"
+            />
+          </div>
+
+          <div className="mt-5 border-t border-ink/10 pt-4">
+            <Toggle
+              label="Offer express delivery"
+              hint="Off. Checkout shows express as a disabled option, and the database downgrades any express request to standard."
+              checked={!!draft.shipping.expressEnabled}
+              onChange={(expressEnabled) => shipping({ expressEnabled })}
             />
           </div>
         </Panel>

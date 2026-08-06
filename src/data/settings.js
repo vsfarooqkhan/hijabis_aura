@@ -24,7 +24,9 @@ export const SETTINGS = {
     upiVpa: 'hijabisaura@okicici',
     upiPayeeName: 'Hijabisaura Retail',
     upiEnabled: true,
-    codEnabled: true,
+    // Off. place_order() refuses a COD order while this is false, so the rule
+    // holds even against a request that bypasses the interface.
+    codEnabled: false,
     codFee: 49,
     codMinOrder: 499,
     codMaxOrder: 7000,
@@ -35,6 +37,9 @@ export const SETTINGS = {
   shipping: {
     freeAbove: 999,
     standardFee: 79,
+    // Express is built but not running. The checkout shows it as a disabled
+    // option so customers can see it is coming.
+    expressEnabled: false,
     expressFee: 199,
     standardDays: '4–7 working days',
     expressDays: '2–3 working days',

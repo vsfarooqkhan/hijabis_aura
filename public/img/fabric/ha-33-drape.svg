@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Dusty Mauve fabric on the fall">
+<defs>
+<linearGradient id="f0" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#574754"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c0aab8"/>
+    </linearGradient><linearGradient id="f1" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#766171"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c3aebb"/>
+    </linearGradient><linearGradient id="f2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#735e6e"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c1abb9"/>
+    </linearGradient><linearGradient id="f3" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#655361"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#b9a0b0"/>
+    </linearGradient><linearGradient id="f4" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#755f6f"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c0a9b8"/>
+    </linearGradient><linearGradient id="f5" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#695664"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#b89faf"/>
+    </linearGradient><linearGradient id="f6" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#63515f"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c1abba"/>
+    </linearGradient><linearGradient id="f7" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#745f6f"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#bba2b2"/>
+    </linearGradient><linearGradient id="f8" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#604f5c"/><stop offset=".46" stop-color="#A98BA0"/><stop offset="1" stop-color="#c1aab9"/>
+    </linearGradient>
+<pattern id="wv" width="8" height="8" patternUnits="userSpaceOnUse">
+  <rect width="8" height="8" fill="none"/>
+  <path d="M0 0V8" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H8" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<linearGradient id="depth" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#372d36" stop-opacity=".85"/>
+  <stop offset=".28" stop-color="#897183" stop-opacity="0"/>
+  <stop offset=".76" stop-color="#7a6474" stop-opacity="0"/>
+  <stop offset="1" stop-color="#3a2f39" stop-opacity=".7"/>
+</linearGradient>
+<linearGradient id="sheen" x1="0" y1="0" x2="1" y2=".6">
+  <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+  <stop offset=".42" stop-color="#fff" stop-opacity=".13"/>
+  <stop offset=".58" stop-color="#fff" stop-opacity=".05"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<radialGradient id="vig" cx=".5" cy=".38" r=".78">
+  <stop offset=".5" stop-color="#000" stop-opacity="0"/>
+  <stop offset="1" stop-color="#000" stop-opacity=".42"/>
+</radialGradient>
+</defs>
+<rect width="900" height="1200" fill="#2e252d"/>
+<path d="M-80 -40C-12.7 395.2 -178.6 881.6 -33.3 1240L78 1240C-38.8 881.6 4.2 395.2 34.3 -40Z" fill="url(#f0)"/><path d="M34.3 -40C4.2 395.2 -38.8 881.6 78 1240L116.7 1240C137.4 881.6 158.1 395.2 127.2 -40Z" fill="url(#f1)"/><path d="M127.2 -40C158.1 395.2 137.4 881.6 116.7 1240L167.9 1240C195.5 881.6 247.3 395.2 256.5 -40Z" fill="url(#f2)"/><path d="M256.5 -40C247.3 395.2 195.5 881.6 167.9 1240L442.5 1240C490.5 881.6 327.4 395.2 388 -40Z" fill="url(#f3)"/><path d="M388 -40C327.4 395.2 490.5 881.6 442.5 1240L639.4 1240C480.1 881.6 550.5 395.2 525.6 -40Z" fill="url(#f4)"/><path d="M525.6 -40C550.5 395.2 480.1 881.6 639.4 1240L644 1240C582.9 881.6 607.3 395.2 594.8 -40Z" fill="url(#f5)"/><path d="M594.8 -40C607.3 395.2 582.9 881.6 644 1240L802.2 1240C684.4 881.6 756.4 395.2 712.9 -40Z" fill="url(#f6)"/><path d="M712.9 -40C756.4 395.2 684.4 881.6 802.2 1240L889.1 1240C735.7 881.6 845.5 395.2 837.4 -40Z" fill="url(#f7)"/><path d="M837.4 -40C845.5 395.2 735.7 881.6 889.1 1240L1026 1240C1010.4 881.6 934.6 395.2 980 -40Z" fill="url(#f8)"/>
+<rect width="900" height="1200" fill="url(#wv)" opacity=".1"/>
+<rect width="900" height="1200" fill="url(#sheen)"/>
+<rect width="900" height="1200" fill="url(#depth)"/>
+<rect width="900" height="1200" fill="url(#vig)"/>
+</svg>

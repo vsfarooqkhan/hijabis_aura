@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Midnight Navy folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#565c6b"/>
+      <stop offset=".34" stop-color="#1B2439"/>
+      <stop offset="1" stop-color="#161c2c"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#565c6b"/>
+      <stop offset=".34" stop-color="#1B2439"/>
+      <stop offset="1" stop-color="#161c2c"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#565c6b"/>
+      <stop offset=".34" stop-color="#1B2439"/>
+      <stop offset="1" stop-color="#161c2c"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#cccac9"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M209 372H745V476H209A52 52 0 0 1 209 372Z" fill="url(#b0)"/>
+      <path d="M217 398H745" stroke="#141827" stroke-width="1.4" opacity=".4"/>
+      <path d="M229 424H745" stroke="#141827" stroke-width="1.4" opacity=".26"/>
+      <path d="M209 375H745" stroke="#767b86" stroke-width="2.4" opacity=".5"/>
+      <path d="M744 372V476" stroke="#131623" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M227.2 516H747.2V620H227.2A52 52 0 0 1 227.2 516Z" fill="url(#b1)"/>
+      <path d="M235.2 542H747.2" stroke="#141827" stroke-width="1.4" opacity=".4"/>
+      <path d="M247.2 568H747.2" stroke="#141827" stroke-width="1.4" opacity=".26"/>
+      <path d="M227.2 519H747.2" stroke="#767b86" stroke-width="2.4" opacity=".5"/>
+      <path d="M746.2 516V620" stroke="#131623" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M229.7 660H733.7V764H229.7A52 52 0 0 1 229.7 660Z" fill="url(#b2)"/>
+      <path d="M237.7 686H733.7" stroke="#141827" stroke-width="1.4" opacity=".4"/>
+      <path d="M249.7 712H733.7" stroke="#141827" stroke-width="1.4" opacity=".26"/>
+      <path d="M229.7 663H733.7" stroke="#767b86" stroke-width="2.4" opacity=".5"/>
+      <path d="M732.7 660V764" stroke="#131623" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#e863NaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#1B2439"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-38</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">MIDNIGHT NAVY</text>
+</g>
+</svg>

@@ -23,15 +23,15 @@ export const FAQS = [
     items: [
       {
         q: 'Is cash on delivery available?',
-        a: 'Yes, across India, on orders between ₹499 and ₹7,000. There is a ₹49 handling fee, which is what the courier charges us to collect. Most couriers will also take UPI at your door.',
+        a: 'Not at the moment — every order is paid by UPI. It keeps our costs down, which is where the 5% prepaid discount comes from, and it means nothing is ever refused at the door. If UPI is genuinely not an option for you, message us on WhatsApp and we will sort something out.',
       },
       {
         q: 'How does UPI payment work here?',
         a: 'At checkout you get a QR with the amount already filled in, or a tap-through link for GPay, PhonePe and Paytm. After paying you enter the 12-digit UTR from your app history. We match it against our bank statement by hand, usually within a few hours, and then your order moves to packing.',
       },
       {
-        q: 'Why is prepaid cheaper?',
-        a: 'Prepaid orders cost us less — no collection fee, far fewer refused deliveries. We pass 5% of that back to you rather than keeping it.',
+        q: 'Why is there a discount for paying by UPI?',
+        a: 'UPI costs us nothing to accept — no gateway fee, no collection charge. Rather than keep that, we pass 5% of it back to you.',
       },
       {
         q: 'Can I pay by card?',
@@ -44,7 +44,7 @@ export const FAQS = [
     items: [
       {
         q: 'How long does delivery take?',
-        a: 'Standard is 4–7 working days and free over ₹999. Express is 2–3 working days at ₹199. Orders placed before 2pm IST dispatch the same day. Bridal and made-to-order pieces ship in 12–16 days.',
+        a: 'Standard is 4–7 working days and free over ₹999. Orders placed before 2pm IST dispatch the same day. Bridal and made-to-order pieces ship in 12–16 days. Express delivery is coming soon.',
       },
       {
         q: 'Can I return something?',
@@ -202,8 +202,8 @@ export const POLICIES = {
     updated: 'March 2026',
     body: [
       { h: 'Where we ship', p: 'Everywhere in India, to any serviceable PIN code. We do not ship internationally yet.' },
-      { h: 'What it costs', p: 'Standard delivery is ₹79, and free on orders over ₹999. Express is ₹199 and is never free, because it costs us the same on a ₹500 order as on a ₹5,000 one.' },
-      { h: 'How long it takes', p: 'Standard arrives in 4–7 working days, express in 2–3. Metro PIN codes are usually at the fast end of that range. Orders placed before 2pm IST are dispatched the same day; after that, the next working day.' },
+      { h: 'What it costs', p: 'Standard delivery is ₹79, and free on orders over ₹999. Express delivery is not running yet — when it is, it will be ₹199 and never free, because it costs us the same on a ₹500 order as on a ₹5,000 one.' },
+      { h: 'How long it takes', p: 'Standard arrives in 4–7 working days. Metro PIN codes are usually at the fast end of that range. Orders placed before 2pm IST are dispatched the same day; after that, the next working day.' },
       { h: 'Made-to-order pieces', p: 'Bridal and hand-embellished pieces take 12–16 days before they ship, because one karigar works each piece from start to finish. The dispatch email tells you the day it leaves us.' },
       { h: 'Tracking', p: 'You get an AWB number and a courier link by email and SMS the moment a parcel is handed over. If the tracking has not updated for 48 hours, message us — we will chase the courier rather than asking you to.' },
       { h: 'If nobody is home', p: 'Couriers try twice. After a second failed attempt the parcel comes back to us and we refund prepaid orders in full. For COD orders we will ask before re-dispatching.' },
@@ -217,7 +217,7 @@ export const POLICIES = {
       { h: 'Condition', p: 'Unworn, unwashed, tags on, in the original packing. We check for perfume, make-up marks and pin holes — anything worn out of the house is not returnable.' },
       { h: 'What is final sale', p: 'Bridal and made-to-order pieces, and any item marked final sale on its product page. These are cut and beaded for you specifically, so we cannot resell them.' },
       { h: 'Exchanges', p: 'A straight swap for a different colourway or cut of the same value is free — we pay the return pickup and the re-dispatch. Only one exchange per order.' },
-      { h: 'Refunds', p: 'Prepaid orders go back to the original UPI ID within 3–5 working days of the parcel reaching us. COD orders are refunded to a UPI ID you give us; we do not send cash or cheques.' },
+      { h: 'Refunds', p: 'Refunds go back to the UPI ID you paid from, within 3–5 working days of the parcel reaching us. We do not send cash or cheques.' },
       { h: 'Damaged or wrong item', p: 'Photograph it before unpacking further and message us the same day. We replace it, cover the pickup, and do not ask you to return it before the replacement ships.' },
       { h: 'Shipping charges', p: 'Original shipping is not refunded on a change-of-mind return. It is refunded in full if the fault was ours.' },
     ],
@@ -244,7 +244,7 @@ export const POLICIES = {
       { h: 'Pricing errors', p: 'If a price is obviously wrong — a ₹1,699 satin listed at ₹169 — we will cancel and refund rather than honour it, and we will tell you why.' },
       { h: 'Product variation', p: 'Colour varies slightly between dye lots, and hand tie-dyed and hand-embellished pieces vary by design. Product pages say so where it applies. This is not a defect.' },
       { h: 'Fabric specification', p: 'Fabric, weave, GSM, dimensions and composition are passed on from our mills as supplied to us. They are accurate to the best of our knowledge and are a guide to help you choose, not a warranty of a specific physical property.' },
-      { h: 'Cash on delivery', p: 'Repeatedly refusing COD parcels may mean we ask you to prepay on future orders. We will tell you if that happens.' },
+      { h: 'Payment', p: 'Orders are paid by UPI before dispatch. We verify each payment against our bank statement by hand, usually within a few hours, and nothing is packed until it clears.' },
       { h: 'Disputes', p: 'Indian law applies and the courts of Mumbai have jurisdiction. Before any of that, message us — almost everything is solved in one WhatsApp exchange.' },
     ],
   },

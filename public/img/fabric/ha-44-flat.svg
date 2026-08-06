@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Champagne folded, with dye-card tag">
+<defs>
+<linearGradient id="b0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaddc3"/>
+      <stop offset=".34" stop-color="#E3D2B0"/>
+      <stop offset="1" stop-color="#a2957f"/>
+    </linearGradient><linearGradient id="b1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaddc3"/>
+      <stop offset=".34" stop-color="#E3D2B0"/>
+      <stop offset="1" stop-color="#a2957f"/>
+    </linearGradient><linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaddc3"/>
+      <stop offset=".34" stop-color="#E3D2B0"/>
+      <stop offset="1" stop-color="#a2957f"/>
+    </linearGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#000" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#000" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<radialGradient id="light" cx=".42" cy=".3" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="stack"><rect x="80" y="360" width="740" height="520"/></clipPath>
+</defs>
+<rect width="900" height="1200" fill="#e4dfd8"/>
+<rect width="900" height="1200" fill="url(#light)"/>
+<g><g transform="rotate(-2.6 450 424)">
+      <ellipse cx="450" cy="482" rx="270" ry="11" fill="#000" opacity=".16"/>
+      <path d="M198.1 372H734.1V476H198.1A52 52 0 0 1 198.1 372Z" fill="url(#b0)"/>
+      <path d="M206.1 398H734.1" stroke="#887d6c" stroke-width="1.4" opacity=".4"/>
+      <path d="M218.1 424H734.1" stroke="#887d6c" stroke-width="1.4" opacity=".26"/>
+      <path d="M198.1 375H734.1" stroke="#eee3ce" stroke-width="2.4" opacity=".5"/>
+      <path d="M733.1 372V476" stroke="#776d5f" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(1.8 450 568) translate(900 0) scale(-1 1)">
+      <ellipse cx="450" cy="626" rx="262" ry="11" fill="#000" opacity=".16"/>
+      <path d="M210.3 516H730.3V620H210.3A52 52 0 0 1 210.3 516Z" fill="url(#b1)"/>
+      <path d="M218.3 542H730.3" stroke="#887d6c" stroke-width="1.4" opacity=".4"/>
+      <path d="M230.3 568H730.3" stroke="#887d6c" stroke-width="1.4" opacity=".26"/>
+      <path d="M210.3 519H730.3" stroke="#eee3ce" stroke-width="2.4" opacity=".5"/>
+      <path d="M729.3 516V620" stroke="#776d5f" stroke-width="2" opacity=".5"/>
+    </g><g transform="rotate(-1.1 450 712)">
+      <ellipse cx="450" cy="770" rx="254" ry="11" fill="#000" opacity=".16"/>
+      <path d="M224.5 660H728.5V764H224.5A52 52 0 0 1 224.5 660Z" fill="url(#b2)"/>
+      <path d="M232.5 686H728.5" stroke="#887d6c" stroke-width="1.4" opacity=".4"/>
+      <path d="M244.5 712H728.5" stroke="#887d6c" stroke-width="1.4" opacity=".26"/>
+      <path d="M224.5 663H728.5" stroke="#eee3ce" stroke-width="2.4" opacity=".5"/>
+      <path d="M727.5 660V764" stroke="#776d5f" stroke-width="2" opacity=".5"/>
+    </g></g>
+<g clip-path="url(#stack)"><rect width="900" height="1200" fill="url(#wv)" opacity=".09"/></g>
+<g opacity=".92">
+  <rect x="330" y="960" width="240" height="112" rx="6" fill="#f36dNaN"/>
+  <circle cx="450" cy="984" r="7" fill="none" stroke="#3B3A3E" stroke-opacity=".35" stroke-width="2"/>
+  <rect x="352" y="1008" width="34" height="34" rx="4" fill="#E3D2B0"/>
+  <text x="398" y="1024" font-family="'IBM Plex Mono',monospace" font-size="17" letter-spacing="2" fill="#3B3A3E">HA-44</text>
+  <text x="398" y="1044" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="1" fill="#3B3A3E" opacity=".62">CHAMPAGNE</text>
+</g>
+</svg>

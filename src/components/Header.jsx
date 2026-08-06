@@ -27,6 +27,7 @@ export default function Header() {
   const mobileOpen = useStore((s) => s.ui.mobileNavOpen)
   const setMobileNav = useStore((s) => s.setMobileNav)
   const brand = useStore((s) => s.settings.brand)
+  const freeAbove = useStore((s) => s.settings.shipping?.freeAbove ?? 0)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -61,7 +62,10 @@ export default function Header() {
       <div className="bg-ink text-blush">
         <div className="shell flex h-9 items-center justify-between gap-4 text-2xs">
           <p className="font-mono tracking-[0.12em]">
-            FREE SHIPPING OVER ₹999 · COD ACROSS INDIA
+            {freeAbove > 0
+              ? `FREE SHIPPING OVER ₹${freeAbove.toLocaleString('en-IN')}`
+              : 'FREE SHIPPING ON EVERY ORDER'}{' '}
+            · 5% OFF WHEN YOU PAY BY UPI
           </p>
           <a
             href={brand.instagramUrl}

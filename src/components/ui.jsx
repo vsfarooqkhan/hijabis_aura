@@ -235,14 +235,18 @@ export function Toggle({ checked, onChange, label, hint }) {
         aria-label={label}
         onClick={() => onChange(!checked)}
         className={cx(
-          'relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300',
+          'relative h-6 w-11 shrink-0 rounded-full p-0 transition-colors duration-300',
           checked ? 'bg-rose' : 'bg-ink/20'
         )}
       >
+        {/* left-0.5 is load-bearing: without an explicit inset the knob is laid
+            out from its static position, which the button's default padding
+            shifts, and the translate then carries it outside the track.
+            Track 44 − knob 20 − insets 4 = 20px of travel. */}
         <span
           className={cx(
-            'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-300 ease-drape',
-            checked ? 'translate-x-[22px]' : 'translate-x-0.5'
+            'absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-300 ease-drape',
+            checked ? 'translate-x-5' : 'translate-x-0'
           )}
         />
       </button>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Cherry hijab styled">
+<defs>
+<linearGradient id="cloth" x1=".1" y1="0" x2=".9" y2="1">
+  <stop offset="0" stop-color="#a54e59"/><stop offset=".42" stop-color="#8E2231"/><stop offset="1" stop-color="#571722"/>
+</linearGradient>
+<radialGradient id="halo" cx=".5" cy=".34" r=".62">
+  <stop offset="0" stop-color="#fff" stop-opacity="0.3"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</radialGradient>
+<pattern id="wv" width="7" height="7" patternUnits="userSpaceOnUse">
+  <rect width="7" height="7" fill="none"/>
+  <path d="M0 0V7" stroke="#fff" stroke-width="1.1" opacity=".5"/>
+  <path d="M0 0H7" stroke="#fff" stroke-width="1.1" opacity=".28"/>
+</pattern>
+<clipPath id="cut"><path d="M96 1240C110 986 246 872 300 792C246 686 236 512 300 392C348 236 566 232 614 392C678 512 668 686 614 792C668 872 804 986 818 1240Z"/></clipPath>
+<linearGradient id="chin" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#3f121b" stop-opacity=".55"/>
+  <stop offset="1" stop-color="#3f121b" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect width="900" height="1200" fill="#eddada"/>
+<rect width="900" height="1200" fill="url(#halo)"/>
+<path d="M96 1240C110 986 246 872 300 792C246 686 236 512 300 392C348 236 566 232 614 392C678 512 668 686 614 792C668 872 804 986 818 1240Z" fill="url(#cloth)"/>
+<g clip-path="url(#cut)">
+  <path d="M359.9 700C381.2 880 372.1 1040 396.4 1240" stroke="#571722" stroke-width="11.3" fill="none" opacity=".4" stroke-linecap="round"/><path d="M299.2 700C331.2 880 304.6 1040 275.3 1240" stroke="#a54e59" stroke-width="17.9" fill="none" opacity=".4" stroke-linecap="round"/><path d="M207 700C218.4 880 197.4 1040 135.3 1240" stroke="#571722" stroke-width="14.3" fill="none" opacity=".4" stroke-linecap="round"/><path d="M734.4 700C736.3 880 748.8 1040 758.8 1240" stroke="#a54e59" stroke-width="9.1" fill="none" opacity=".4" stroke-linecap="round"/><path d="M650.3 700C697.3 880 644.2 1040 562.9 1240" stroke="#571722" stroke-width="9.6" fill="none" opacity=".4" stroke-linecap="round"/>
+  <path d="M450 316C536 316 574 392 570 480C566 574 522 646 450 646C378 646 334 574 330 480C326 392 364 316 450 316Z" fill="#eddada"/>
+  <path d="M330 500C330 500 388 566 450 566C512 566 570 500 570 500" fill="none" stroke="#4d151f" stroke-width="26" opacity=".3"/>
+  <rect x="240" y="620" width="420" height="200" fill="url(#chin)"/>
+  <rect width="900" height="1200" fill="url(#wv)" opacity=".12"/>
+</g>
+<path d="M450 316C536 316 574 392 570 480C566 574 522 646 450 646C378 646 334 574 330 480C326 392 364 316 450 316Z" fill="none" stroke="#611925" stroke-width="2.5" opacity=".5"/>
+</svg>

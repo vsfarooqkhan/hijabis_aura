@@ -163,7 +163,7 @@ export default function Footer() {
           <div className="text-sm">
             <p className="eyebrow mb-3 text-gold">Pay how you like</p>
             <div className="flex flex-wrap gap-2">
-              {['UPI', 'Google Pay', 'PhonePe', 'Paytm', 'Cash on delivery'].map((m) => (
+              {['UPI', 'Google Pay', 'PhonePe', 'Paytm', 'BHIM'].map((m) => (
                 <span
                   key={m}
                   className="border border-blush/20 px-2.5 py-1.5 font-mono text-2xs text-blush/70"

@@ -43,8 +43,9 @@ export default function Checkout() {
   const settings = useStore((s) => s.settings)
   const placeOrder = useStore((s) => s.placeOrder)
 
-  const [method, setMethod] = useState(settings.payments.upiEnabled ? 'upi' : 'cod')
+  const [method, setMethod] = useState('upi')
   const [speed, setSpeed] = useState('standard')
+  const expressOn = !!settings.shipping.expressEnabled
   const [stage, setStage] = useState('details') // details → pay → done
   const [draft, setDraft] = useState(null)
   const [utr, setUtr] = useState('')
@@ -65,7 +66,9 @@ export default function Checkout() {
 
   const codBlocked =
     method === 'cod' &&
-    (totals.subtotal < settings.payments.codMinOrder || totals.subtotal > settings.payments.codMaxOrder)
+    (!settings.payments.codEnabled ||
+      totals.subtotal < settings.payments.codMinOrder ||
+      totals.subtotal > settings.payments.codMaxOrder)
 
   const upiLink = useMemo(
     () =>
@@ -398,20 +401,30 @@ export default function Checkout() {
                 price={totals.subtotal >= settings.shipping.freeAbove ? 'Free' : money(settings.shipping.standardFee)}
               />
               <Choice
-                selected={speed === 'express'}
-                onSelect={() => setSpeed('express')}
+                selected={expressOn && speed === 'express'}
+                onSelect={() => expressOn && setSpeed('express')}
+                disabled={!expressOn}
                 icon={Zap}
                 title="Express"
-                sub={settings.shipping.expressDays}
-                price={money(settings.shipping.expressFee)}
+                sub={
+                  expressOn
+                    ? settings.shipping.expressDays
+                    : 'Coming soon — not available yet'
+                }
+                price={expressOn && settings.shipping.expressFee ? money(settings.shipping.expressFee) : undefined}
               />
             </div>
-            <p className="mt-3 font-mono text-2xs text-taupe">{settings.shipping.dispatchNote}</p>
+            <p className="mt-3 font-mono text-2xs text-taupe">
+              {settings.shipping.dispatchNote}
+              {!expressOn && ' Express delivery is coming soon.'}
+            </p>
           </section>
 
           {/* ------------------------------------------------------ payment --- */}
           <section>
-            <h2 className="display-sm mb-5 text-xl">How would you like to pay?</h2>
+            <h2 className="display-sm mb-5 text-xl">
+              {settings.payments.codEnabled ? 'How would you like to pay?' : 'Payment'}
+            </h2>
             <div className="space-y-3">
               {settings.payments.upiEnabled && (
                 <Choice
