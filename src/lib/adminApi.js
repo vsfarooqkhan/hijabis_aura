@@ -14,12 +14,30 @@ const guard = () => {
   if (!isConfigured) throw new Error('Supabase is not configured.')
 }
 
+/** Postgres messages a shop owner cannot act on, rewritten into ones they can. */
+const CONSTRAINTS = {
+  products_slug_check:
+    'The URL slug may only contain lowercase letters, numbers and hyphens.',
+  products_slug_key: 'Another product already uses that URL slug.',
+  mrp_not_below_price: 'The list price cannot be lower than the selling price.',
+  colorways_hex_check: 'That colour is not a valid 6-digit hex value.',
+  coupons_code_check: 'Coupon codes are 3–20 characters, uppercase letters and numbers only.',
+  percent_within_range: 'A percentage discount has to be between 0 and 100.',
+  orders_ship_pincode_check: 'That PIN code is not valid — six digits, not starting with zero.',
+}
+
 const fail = (error, what) => {
   if (!error) return
+
   // RLS denials surface as permission errors; make them legible.
   if (error.code === '42501' || error.message?.includes('row-level security')) {
     throw new Error(`Not permitted: ${what}. Is your account in the admins table?`)
   }
+
+  // A raw "violates check constraint" tells the reader nothing they can fix.
+  const named = Object.keys(CONSTRAINTS).find((c) => error.message?.includes(c))
+  if (named) throw new Error(CONSTRAINTS[named])
+
   throw new Error(error.message || `Could not ${what}`)
 }
 

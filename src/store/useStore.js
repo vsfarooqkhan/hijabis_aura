@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 import { SETTINGS } from '../data/settings'
 import { fetchStorefront, fetchProducts, placeOrderRemote, validateCouponRemote } from '../lib/api'
 import {
@@ -35,6 +35,16 @@ import { supabase } from '../lib/supabase'
  *                 there is no account to store it against.
  */
 const SCHEMA = 5
+
+/**
+ * Lowercase alphanumerics only.
+ *
+ * nanoid's default alphabet includes uppercase and `_`, but products.slug is
+ * checked against ^[a-z0-9-]+$ — so the default rejected roughly nine out of ten
+ * generated slugs. Ids share the alphabet so they are safe in URLs and in
+ * storage object paths too.
+ */
+const shortId = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)
 
 export const lineKey = (productId, colorwayCode) => `${productId}::${colorwayCode}`
 
@@ -305,10 +315,11 @@ export const useStore = create(
       },
 
       createProduct: async () => {
-        const id = `p-${nanoid(8)}`
+        const suffix = shortId()
+        const id = `p-${suffix}`
         const draft = {
           id,
-          slug: `new-product-${id.slice(-4)}`,
+          slug: `new-product-${suffix}`,
           name: 'Untitled hijab',
           tagline: '',
           collection: 'everyday-modal',
@@ -349,8 +360,13 @@ export const useStore = create(
         const p = get().products.find((x) => x.id === id)
         if (!p) return null
         const copy = structuredClone(p)
-        copy.id = `p-${nanoid(8)}`
-        copy.slug = `${p.slug}-copy`.slice(0, 60)
+        const suffix = shortId()
+        copy.id = `p-${suffix}`
+        // Duplicating the same product twice would otherwise collide on the
+        // unique slug index, so the suffix only appears when it has to.
+        const taken = new Set(get().products.map((x) => x.slug))
+        const base = `${p.slug}-copy`.slice(0, 50)
+        copy.slug = taken.has(base) ? `${base}-${suffix.slice(0, 4)}` : base
         copy.name = `${p.name} (copy)`
         copy.published = false
         copy.sold = 0
