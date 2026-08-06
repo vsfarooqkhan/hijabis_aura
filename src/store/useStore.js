@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { customAlphabet } from 'nanoid'
+import { signInWithEmailAndPassword, signOut as firebaseSignOut, getAuth } from 'firebase/auth'
 import { SETTINGS } from '../data/settings'
 import { fetchStorefront, fetchProducts, placeOrderRemote, validateCouponRemote } from '../lib/api'
 import {
@@ -258,12 +259,28 @@ export const useStore = create(
         if (!supabase) return { ok: false, message: 'Supabase is not configured.' }
         const { data, error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) return { ok: false, message: error.message }
+
+        // Also sign in to Firebase for storage uploads
+        try {
+          const firebaseAuth = getAuth()
+          await signInWithEmailAndPassword(firebaseAuth, email, password)
+        } catch (firebaseError) {
+          console.warn('[Hijabisaura] Firebase sign-in failed (uploads may not work):', firebaseError.message)
+          // Don't fail the whole login if Firebase fails, but warn
+        }
+
         set({ admin: { email: data.user.email, userId: data.user.id } })
         return { ok: true }
       },
 
       signOut: async () => {
         if (supabase) await supabase.auth.signOut()
+        try {
+          const firebaseAuth = getAuth()
+          await firebaseSignOut(firebaseAuth)
+        } catch (err) {
+          console.warn('[Hijabisaura] Firebase sign-out failed:', err.message)
+        }
         set({
           admin: { email: null, userId: null },
           orders: [],

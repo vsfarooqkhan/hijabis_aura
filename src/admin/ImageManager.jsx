@@ -15,7 +15,7 @@ import cx from '../lib/cx'
 import { imagesFor, SHOT_LABELS, SHOTS } from '../data/colorways.mjs'
 import {
   ACCEPT, MAX_BYTES, uploadImages, isUploadedUrl, deleteUploadedImage,
-} from '../lib/storage'
+} from '../lib/firebase-storage'
 
 /**
  * Multi-image manager for one colourway.
