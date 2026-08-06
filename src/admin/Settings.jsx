@@ -23,6 +23,10 @@ export default function Settings() {
   const [saving, setSaving] = useState(false)
 
   const save = async () => {
+    if (!draft.payments.upiEnabled && !draft.payments.codEnabled) {
+      toast.error('Enable at least one payment method, or no one can check out.')
+      return
+    }
     if (!/^[\w.\-]{2,}@[\w\-]{2,}$/.test(draft.payments.upiVpa)) {
       toast.error('That UPI ID does not look valid — it should look like name@bank.')
       return
@@ -139,6 +143,21 @@ export default function Settings() {
 
         {/* ------------------------------------------------------- payments --- */}
         <Panel title="Payments" sub="The UPI ID here is what the checkout QR encodes">
+          {!draft.payments.upiEnabled && !draft.payments.codEnabled && (
+            <div className="mb-5 flex gap-3 border-2 border-clay bg-clay-wash p-4">
+              <AlertTriangle size={18} className="mt-0.5 shrink-0 text-clay-deep" />
+              <div>
+                <p className="text-sm font-semibold text-clay-deep">
+                  No payment method is enabled — customers cannot check out.
+                </p>
+                <p className="mt-1 font-mono text-2xs leading-relaxed text-clay-deep/85">
+                  Every order is refused while both UPI and cash on delivery are off. Turn UPI back
+                  on below and save.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="mb-5 flex gap-3 border border-gold/30 bg-gold-wash p-4">
             <AlertTriangle size={16} className="mt-0.5 shrink-0 text-gold-deep" />
             <p className="font-mono text-2xs leading-relaxed text-gold-deep">

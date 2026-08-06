@@ -285,6 +285,23 @@ export async function adminMarkPaid(id, { upiRef, verifiedBy } = {}) {
 
 export async function adminSaveSettings(settings) {
   guard()
-  const rows = Object.entries(settings).map(([key, value]) => ({ key, value, is_public: true }))
+
+  // Merge into whatever the row currently holds instead of replacing it.
+  //
+  // Replacing was a real bug: a key added by a migration but not yet known to
+  // the running build was silently dropped the next time anyone pressed Save.
+  // That is exactly how `expressEnabled` disappeared moments after 0004 added it.
+  const { data: current, error: readErr } = await supabase
+    .from('store_settings')
+    .select('key, value')
+  fail(readErr, 'read the current settings')
+
+  const existing = Object.fromEntries((current || []).map((r) => [r.key, r.value]))
+  const rows = Object.entries(settings).map(([key, value]) => ({
+    key,
+    value: { ...(existing[key] || {}), ...value },
+    is_public: true,
+  }))
+
   fail((await supabase.from('store_settings').upsert(rows)).error, 'save settings')
 }
